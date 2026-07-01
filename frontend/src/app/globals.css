@@ -737,35 +737,6 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     padding: 1px 6px;
   }
 
-  /* Fixed bottom bar for primary links */
-  .header-actions .btn {
-    position: fixed;
-    bottom: 0;
-    z-index: 1000;
-    height: 52px;
-    margin: 0 !important;
-    border-radius: 0;
-    border-top: 2px solid var(--border);
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
-  }
-  
-  .header-actions .btn-secondary {
-    left: 0;
-    width: 50%;
-    border-right: 1px solid var(--border);
-  }
-  
-  .header-actions .btn-primary {
-    right: 0;
-    width: 50%;
-    border-left: 1px solid var(--border);
-  }
 
   .header-actions {
     display: flex;
@@ -851,3 +822,71 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     gap: 20px;
   }
 }
+
+/* ===========================================================
+   Mobile Bottom Navigation Footer Component Styles
+   =========================================================== */
+.mobile-footer-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .header-btn {
+    display: none !important;
+  }
+  
+  .app-shell {
+    padding-bottom: 60px; /* Safe space to prevent overlapping content */
+  }
+  
+  .mobile-footer-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    z-index: 1000;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 4px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    gap: 4px;
+    width: 33%;
+    height: 100%;
+    transition: color 0.15s ease;
+  }
+
+  .mobile-nav-item:hover,
+  .mobile-nav-item:focus {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .mobile-nav-item .nav-icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .mobile-nav-item:active .nav-icon {
+    transform: scale(0.85);
+  }
+}
+
