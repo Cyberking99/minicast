@@ -890,3 +890,106 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   }
 }
 
+/* ===========================================================
+   Pool Detail Page Responsive Styles
+   =========================================================== */
+.pool-detail-countdown-wrap {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.pool-outcome-card {
+  border: 2px solid var(--border);
+  background: var(--surface);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.pool-outcome-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.pool-outcome-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  background: transparent;
+  display: grid;
+  place-items: center;
+}
+
+.pool-outcome-card.selected .pool-outcome-checkbox {
+  background: var(--accent);
+}
+
+.pool-outcome-details {
+  display: flex;
+  gap: 24px;
+  font-size: 13px;
+}
+
+.pool-outcome-odds {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.pool-outcome-staked {
+  color: var(--muted);
+}
+
+.pool-meta-specs {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr;
+  gap: 24px;
+  border: 2px solid var(--border);
+  padding: 24px;
+  background: var(--surface);
+}
+
+@media (max-width: 768px) {
+  .pool-detail-question-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .pool-detail-countdown-wrap {
+    text-align: left;
+  }
+
+  .pool-detail-countdown {
+    font-size: 40px;
+    text-align: left;
+  }
+  
+  .pool-meta-specs {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .pool-outcome-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  
+  .pool-outcome-details {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 11px;
+    border-top: 1px dashed var(--border-soft);
+    padding-top: 8px;
+  }
+}
+
+

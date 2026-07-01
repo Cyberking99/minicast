@@ -187,7 +187,7 @@ export function StakePanel({
 
   return (
     <>
-      <div className="stake-panel-col" style={{ borderLeft: "1px solid var(--border)", paddingLeft: "40px" }}>
+      <div className="stake-panel-col">
         <h3 style={{ fontSize: "18px", marginBottom: "20px" }}>PLACE YOUR STAKE</h3>
 
         {isWrongNetwork ? (

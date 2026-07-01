@@ -177,7 +177,7 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
 
       {/* Hero Header: question fills top ~30% of viewport, inline status, large countdown */}
       <div className="pool-detail-hero" style={{ borderBottom: "2px solid var(--border)", paddingBottom: "32px", marginBottom: "40px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "32px" }}>
+        <div className="pool-detail-question-wrap">
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
               <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", fontFamily: "var(--font-mono)" }}>
@@ -190,7 +190,7 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
             </h1>
           </div>
 
-          <div style={{ textAlign: "right" }}>
+          <div className="pool-detail-countdown-wrap">
             <div style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", fontFamily: "var(--font-mono)", marginBottom: "4px" }}>
               TIME REMAINING
             </div>
@@ -264,35 +264,22 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
                   <div
                     key={idx}
                     onClick={() => status === "open" && setSelectedOptionIdx(idx)}
+                    className={`pool-outcome-card ${isSelected ? "selected" : ""}`}
                     style={{
-                      border: isSelected ? "2px solid var(--accent)" : "2px solid var(--border)",
-                      background: isSelected ? "var(--accent-soft)" : "var(--surface)",
-                      padding: "16px 20px",
                       cursor: status === "open" ? "pointer" : "default",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      fontFamily: "var(--font-mono)",
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      <div style={{
-                        width: "16px",
-                        height: "16px",
-                        border: "2px solid var(--border)",
-                        background: isSelected ? "var(--accent)" : "transparent",
-                        display: "grid",
-                        placeItems: "center"
-                      }}>
+                      <div className="pool-outcome-checkbox">
                         {isSelected && <span style={{ color: "#FFF", fontSize: "10px" }}>✓</span>}
                       </div>
                       <span style={{ fontWeight: 700, fontSize: "14px" }}>{opt.label}</span>
                     </div>
 
-                    <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
+                    <div className="pool-outcome-details">
                       <span>{opt.percentage}% SHARE</span>
-                      <span style={{ color: "var(--accent)", fontWeight: 700 }}>{opt.odds}</span>
-                      <span style={{ color: "var(--muted)" }}>{opt.totalStakedStr} STAKED</span>
+                      <span className="pool-outcome-odds">{opt.odds}</span>
+                      <span className="pool-outcome-staked">{opt.totalStakedStr} STAKED</span>
                     </div>
                   </div>
                 );
@@ -301,7 +288,7 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
           </div>
 
           {/* Meta specs */}
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1.2fr", gap: "24px", border: "2px solid var(--border)", padding: "24px", background: "var(--surface)" }}>
+          <div className="pool-meta-specs">
             <div>
               <div style={{ fontSize: "10px", color: "var(--muted)" }}>POOL ADDRESS</div>
               <div style={{ fontSize: "12px", fontFamily: "var(--font-mono)", wordBreak: "break-all", marginTop: "4px" }}>{poolId}</div>
