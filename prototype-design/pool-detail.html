@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forecast — Pool Detail</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .pool-header-question {
+      font-size: clamp(22px, 2.4vw, 32px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin: 4px 0 12px;
+    }
+    .pool-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .countdown {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-size: 13px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .pool-total-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .pool-total-value {
+      font-size: 24px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .ai-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 12px;
+      cursor: pointer;
+    }
+    .ai-link:hover { color: var(--accent); }
+    .activity-heading {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-header-inner">
+        <a href="home.html" class="logo">
+          <span class="logo-icon">F</span>
+          Forecast
+        </a>
+        <div class="header-actions">
+          <button class="wallet-btn"><span class="wallet-dot"></span> Connect Wallet</button>
+          <a href="create-pool.html" class="btn btn-primary">Create Prediction</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="app-main">
+      <div class="pool-detail-layout">
+        <!-- Left / Main column -->
+        <div class="pool-detail-main">
+          <!-- Breadcrumb -->
+          <div style="margin-bottom:12px;">
+            <a href="home.html" style="font-size:13px;color:var(--muted);">← Back to Feed</a>
+          </div>
+
+          <!-- Hero image -->
+          <div class="pool-hero">
+            <img src="https://picsum.photos/seed/realmadrid-hero/1200/400" alt="" loading="lazy" />
+          </div>
+
+          <!-- Pool Header -->
+          <h1 class="pool-header-question">Will Real Madrid win the 2026 Champions League final?</h1>
+
+          <div class="pool-header-meta">
+            <span class="status-badge open"><span class="status-dot"></span>Open</span>
+            <span class="countdown">⏱ 14d 6h 42m</span>
+            <span class="pool-total-label">Total pool: <strong class="pool-total-value t-num">$201.0K</strong></span>
+          </div>
+
+          <!-- Full stake bar (desktop) -->
+          <div class="stake-bar" style="height:36px;margin-bottom:20px;">
+            <div class="stake-bar-segment" style="width:62%">
+              <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+              <span class="stake-bar-segment-label" style="font-size:14px;">62% · Yes (Real Madrid wins)</span>
+              <div class="stake-bar-tooltip">$124.8K · 431 stakers · 1.6x odds</div>
+            </div>
+            <div class="stake-bar-segment" style="width:38%">
+              <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+              <span class="stake-bar-segment-label" style="font-size:14px;">38% · No</span>
+              <div class="stake-bar-tooltip">$76.2K · 284 stakers · 2.6x odds</div>
+            </div>
+          </div>
+
+          <!-- Option Cards -->
+          <div class="option-cards">
+            <div class="option-card">
+              <div class="option-card-check">✓</div>
+              <div class="option-card-name">Yes — Real Madrid wins</div>
+              <div class="option-card-stats">
+                <span class="option-card-pct">62.1%</span>
+                <span class="option-card-odds">1.6x odds</span>
+                <span class="option-card-odds">$124.8K staked</span>
+              </div>
+            </div>
+            <div class="option-card">
+              <div class="option-card-check">✓</div>
+              <div class="option-card-name">No — any other team wins</div>
+              <div class="option-card-stats">
+                <span class="option-card-pct">37.9%</span>
+                <span class="option-card-odds">2.6x odds</span>
+                <span class="option-card-odds">$76.2K staked</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Analysis link (opens modal) -->
+          <button class="ai-link" onclick="document.getElementById('ai-modal').classList.add('open')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 0 0-6-6z"/><circle cx="12" cy="9" r="2"/></svg>
+            Unlock AI Analysis
+          </button>
+
+          <!-- Activity Feed -->
+          <div class="activity-heading">Recent Activity</div>
+          <div class="activity-feed">
+            <div class="activity-item">
+              <span class="activity-avatar">A1</span>
+              <span><strong>0xA1…b2</strong> staked <strong>$80.00 USDC</strong> on <strong>Yes — Real Madrid wins</strong></span>
+              <span style="margin-left:auto;color:var(--muted);font-size:12px;">4 min ago</span>
+            </div>
+            <div class="activity-item">
+              <span class="activity-avatar">3F</span>
+              <span><strong>0x3F…9a</strong> staked <strong>$240.00 USDC</strong> on <strong>No — any other team wins</strong></span>
+              <span style="margin-left:auto;color:var(--muted);font-size:12px;">12 min ago</span>
+            </div>
+            <div class="activity-item">
+              <span class="activity-avatar">7C</span>
+              <span><strong>0x7C…4e</strong> staked <strong>$55.00 USDC</strong> on <strong>Yes — Real Madrid wins</strong></span>
+              <span style="margin-left:auto;color:var(--muted);font-size:12px;">27 min ago</span>
+            </div>
+            <div class="activity-item">
+              <span class="activity-avatar">D2</span>
+              <span><strong>0xD2…f1</strong> staked <strong>$1,200.00 USDC</strong> on <strong>Yes — Real Madrid wins</strong></span>
+              <span style="margin-left:auto;color:var(--muted);font-size:12px;">1h ago</span>
+            </div>
+            <div class="activity-item">
+              <span class="activity-avatar">9B</span>
+              <span><strong>0x9B…33</strong> staked <strong>$100.00 USDC</strong> on <strong>No — any other team wins</strong></span>
+              <span style="margin-left:auto;color:var(--muted);font-size:12px;">2h ago</span>
+            </div>
+          </div>
+
+          <!-- Oracle Verdict (visible when settled) -->
+          <div class="oracle-verdict" style="display:none;">
+            <div class="oracle-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              Oracle Verdict · Venice AI
+              <span class="confidence-arc" style="margin-left:auto;">
+                <span class="confidence-arc-fill"></span>
+              </span>
+            </div>
+            <div class="oracle-reasoning">
+              Based on analysis of current season performance, bracket seeding, and head-to-head matchups, Real Madrid has a 68% probability of winning the 2026 Champions League final. Key factors: their undefeated knockout stage run, average 2.3 goals per game in UCL play, and historical advantage in finals.
+            </div>
+            <div class="oracle-source">
+              <span>📄</span>
+              <span>Source: UEFA match data, sports analytics models</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right sidebar — Stake Panel -->
+        <aside class="pool-detail-sidebar">
+          <div class="stake-panel">
+            <div class="stake-panel-header">Place Your Stake</div>
+
+            <div class="stake-option-label">
+              Selected option: <strong>—</strong>
+            </div>
+
+            <div class="stake-input-wrap">
+              <input class="stake-input" type="text" inputmode="decimal" placeholder="0" />
+              <span class="stake-input-suffix">USDC</span>
+            </div>
+
+            <div class="stake-live-feedback">
+              <div>Your share if you win: <strong class="stake-share t-num">$0.00</strong></div>
+              <div>Your implied odds: <strong class="stake-odds t-num">—</strong></div>
+            </div>
+
+            <button class="btn btn-primary btn-full stake-btn" disabled>
+              Select an option to stake
+            </button>
+
+            <button class="ai-link" style="margin-top:12px;display:flex;justify-content:center;" onclick="document.getElementById('ai-modal').classList.add('open')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 0 0-6-6z"/><circle cx="12" cy="9" r="2"/></svg>
+              Unlock AI Analysis — $0.50
+            </button>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- AI Analysis Modal -->
+  <div class="modal-overlay" id="ai-modal">
+    <div class="modal-content" style="position:relative;">
+      <button class="modal-close" onclick="document.getElementById('ai-modal').classList.remove('open')">✕</button>
+
+      <div data-ai-locked>
+        <!-- Blurred preview (shown before unlock) -->
+        <div class="blur-preview" data-ai-unlock>
+          <div class="modal-title" style="margin-top:8px;">AI Analysis Report</div>
+
+          <!-- Implied probability gauges -->
+          <div style="margin-bottom:16px;">
+            <div class="gauge-bar">
+              <span class="gauge-label">Yes — Real Madrid</span>
+              <div class="gauge-track"><div class="gauge-fill" style="width:62%"></div></div>
+              <span class="gauge-value">62%</span>
+            </div>
+            <div class="gauge-bar">
+              <span class="gauge-label">No — any other team</span>
+              <div class="gauge-track"><div class="gauge-fill" style="width:38%"></div></div>
+              <span class="gauge-value">38%</span>
+            </div>
+          </div>
+
+          <!-- Written analysis -->
+          <div style="font-size:14px;line-height:1.7;color:var(--muted);margin-bottom:16px;">
+            <p style="margin-bottom:12px;">Real Madrid enters the 2026 final with the strongest UCL campaign of any team this season — 9 wins, 1 draw, and a +18 goal differential across the knockout stage. Their transition press has generated 12 goals from turnovers, the highest in the competition.</p>
+            <p style="margin-bottom:12px;">The opponent's vulnerability on set pieces (7 goals conceded from dead-ball situations) aligns with Real Madrid's primary attacking strength — they lead the tournament in headed goals (8) and corner-kick conversion rate (14%).</p>
+            <p>The key variable is whether the opponent's high press can disrupt Madrid's build-up from the back. In their two meetings this season, Madrid completed 89% of passes under pressure, suggesting resilience.</p>
+          </div>
+
+          <!-- Confidence score -->
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <span style="font-size:13px;font-weight:600;color:var(--muted);">Confidence</span>
+            <div class="confidence-arc" style="width:48px;height:24px;">
+              <div class="confidence-arc-fill" style="background:conic-gradient(var(--accent) 0deg 245deg, var(--border) 245deg 360deg);border-radius:24px 24px 0 0;"></div>
+            </div>
+            <span style="font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;">68%</span>
+          </div>
+
+          <!-- Risk score -->
+          <div class="risk-indicator">
+            <span style="font-size:13px;font-weight:600;">Risk Score</span>
+            <div class="risk-bar"><div class="risk-fill medium" style="width:42%"></div></div>
+            <span class="risk-label">Medium</span>
+          </div>
+
+          <!-- Sources -->
+          <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+              <span>📄</span>
+              <span>UEFA Champions League 2025/26 — Match Statistics</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+              <span>📄</span>
+              <span>Head-to-Head Historical Data (2000–2026)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span>📄</span>
+              <span>Player Form Index — Top 50 UCL Scorers</span>
+            </div>
+          </div>
+
+          <!-- Attribution -->
+          <div style="display:flex;align-items:center;gap:6px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 0 0-6-6z"/><circle cx="12" cy="9" r="2"/></svg>
+            Powered by Venice AI · Private inference
+          </div>
+        </div>
+
+        <!-- Overlay CTA -->
+        <div class="blur-overlay" style="position:absolute;">
+          <div style="text-align:center;">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;">AI Analysis Report</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Venice AI evaluates options, confidence, and risk</div>
+            <button class="btn btn-primary btn-pay-ai">Unlock for $0.50 USDC</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

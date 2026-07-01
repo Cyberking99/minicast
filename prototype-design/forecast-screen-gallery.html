@@ -1,0 +1,259 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forecast — Screen Gallery</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .gallery-header { padding:32px 24px;max-width:var(--content-max);margin:0 auto; }
+    .gallery-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;padding:0 24px 48px;max-width:var(--content-max);margin:0 auto; }
+    .gallery-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;transition:box-shadow 0.2s; }
+    .gallery-card:hover { box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+    .gallery-preview { aspect-ratio:16/10;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative; }
+    .gallery-preview iframe { width:100%;height:100%;border:0; }
+    .gallery-card-body { padding:16px; }
+    .gallery-card-title { font-size:15px;font-weight:600;margin-bottom:4px; }
+    .gallery-card-desc { font-size:13px;color:var(--muted);line-height:1.5; }
+    .gallery-tag { display:inline-flex;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-right:4px;margin-bottom:4px; }
+    .gallery-tag.light { background:var(--bg);color:var(--fg);border:1px solid var(--border); }
+    .gallery-tag.dark { background:oklch(18% 0.012 255);color:#fff;border:1px solid oklch(30% 0.01 255); }
+    .gallery-tag.desktop { background:var(--accent-soft);color:var(--accent); }
+    .gallery-tag.mobile { background:var(--amber-soft);color:var(--amber); }
+    .gallery-annotation { margin-top:10px;padding:8px 10px;background:var(--bg);border-radius:var(--radius-sm);font-size:12px;color:var(--muted);border-left:2px solid var(--accent); }
+    .gallery-card-actions { display:flex;gap:8px;margin-top:10px; }
+    .gallery-card-actions a { font-size:12px;padding:4px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);color:var(--fg);text-decoration:none;transition:all 0.15s; }
+    .gallery-card-actions a:hover { border-color:var(--accent-soft); }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header-inner">
+        <span class="logo">
+          <span class="logo-icon">F</span>
+          Forecast
+        </span>
+        <span style="font-size:13px;color:var(--muted);">Design Deliverable</span>
+      </div>
+    </header>
+
+    <div class="gallery-header">
+      <h1 class="t-h1 mb-2">Forecast — Prediction Pool Frontend</h1>
+      <p class="t-body" style="color:var(--muted);max-width:600px;">
+        Complete production-ready design for a USDC-based prediction pool app with Venice AI oracle resolution.
+        6 screens × light/dark/mobile variants. Full design system below.
+      </p>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- 1. Home -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">Feed</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Feed with pool cards, stake bars, categories</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">1. Home / Feed</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag desktop">Desktop</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> Three feed sections (Trending, Closing Soon, Newly Created) with a unified card design — the stake bar is the visual anchor, not text. This lets users scan probability splits instantly.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="home.html">Open Light →</a>
+            <a href="home-dark.html">Dark →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Pool Detail -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">Detail</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Pool detail + sidebar stake panel</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">2. Pool Detail</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag desktop">Desktop</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> Sticky sidebar stake panel vs bottom-sheet on mobile. The inline stake input shows live odds feedback as the user types — crucial for financial decisions. The AI analysis is a modal overlay, preserving the pool context.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="pool-detail.html">Open Light →</a>
+            <a href="pool-detail-dark.html">Dark →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. AI Analysis -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">AI Report</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">x402-gated AI analysis modal</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">3. AI Analysis Report</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag desktop">Desktop</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> Blurred preview + paywall overlay before unlock simulates the x402 micropayment flow. The confidence arc visualization (not just a number) makes the AI's certainty tangible. Venice AI attribution builds credibility.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="pool-detail.html">View inside Pool Detail →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Create Pool -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">Create</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Focused form with preview step</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">4. Create Pool</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag desktop">Desktop</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> Composing-a-post minimalism instead of an intimidating multi-tab form. Dynamic option rows (min 2, max 10), date presets for deadlines, and a Preview step before submission — reduces cognitive load for first-time creators.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="create-pool.html">Open →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Portfolio -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">Portfolio</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Positions, history, P&L summary</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">5. My Portfolio</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag desktop">Desktop</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> Summary strip at top gives immediate P&L clarity — the most important financial metric. Position cards with pool-share mini-bar show at a glance whether your option is winning. Color coding (green/red) maps to gain/loss.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="portfolio.html">Open →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Payout -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">Payout</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Settlement celebration screen</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">6. Settlement / Payout</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag desktop">Desktop</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> No confetti — a clean, confident checkmark + the dollar amount in large type communicates the win with dignity. The oracle verdict is displayed prominently as a feature, not a footnote. Transaction hash copy button enables verification.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="payout.html">Open →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Mobile Pool Detail -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">Mobile</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Pool Detail · 390px viewport</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">7. Mobile Pool Detail</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag mobile">Mobile</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> Stake panel becomes a bottom sheet triggered by a fixed CTA bar — keeps the main content scrollable. Bottom tab bar provides mobile-native navigation (Feed, Create, Portfolio, Activity, Profile). AI analysis also in a bottom sheet.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="mobile-pool-detail.html">Open →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Mobile Portfolio -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">Portfolio</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Portfolio · 390px viewport</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">8. Mobile Portfolio</div>
+          <div>
+            <span class="gallery-tag light">Light</span>
+            <span class="gallery-tag mobile">Mobile</span>
+          </div>
+          <div class="gallery-annotation">
+            <strong>Key decision:</strong> Compact summary strip (Staked / Won / P&L) in a 3-column grid saves vertical space. Swipeable tabs for Active/History. Bottom tab bar mirrors native fintech conventions — users recognize this from Robinhood, Coinbase.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="mobile-portfolio.html">Open →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Design System -->
+      <div class="gallery-card">
+        <div class="gallery-preview" style="background:var(--bg);">
+          <div style="padding:24px;text-align:center;">
+            <div style="font-size:32px;font-weight:700;letter-spacing:-0.03em;">System</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Full design system spec</div>
+          </div>
+        </div>
+        <div class="gallery-card-body">
+          <div class="gallery-card-title">9. Design System Specification</div>
+          <div><span class="gallery-tag light">Reference</span></div>
+          <div class="gallery-annotation">
+            Color tokens (OKLch), type scale, spacing, component state system, and status badge definitions for the entire product.
+          </div>
+          <div class="gallery-card-actions">
+            <a href="spec.html">Open →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

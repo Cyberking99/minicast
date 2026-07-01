@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "Forecast — Prediction Pool Frontend",
+  "entry": "forecast-screen-gallery.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-05-24T11:57:01.574Z",
+  "updatedAt": "2026-05-24T11:57:01.580Z",
+  "metadata": {
+    "identifier": "forecast-screen-gallery",
+    "artifactType": "text/html",
+    "inferred": false
+  }
+}

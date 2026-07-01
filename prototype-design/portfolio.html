@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forecast — Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .position-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 10px;
+      transition: box-shadow 0.15s;
+      cursor: pointer;
+    }
+    .position-card:hover { box-shadow: 0 1px 6px rgba(0,0,0,0.04); border-color: var(--accent-soft); }
+    .position-info { flex: 1; min-width: 0; }
+    .position-question { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .position-detail { font-size: 12px; color: var(--muted); }
+    .position-amount { text-align: right; }
+    .position-value { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .position-value.won { color: var(--green); }
+    .position-value.lost { color: var(--red); }
+    .position-pool-bar {
+      width: 80px;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .position-pool-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-header-inner">
+        <a href="home.html" class="logo">
+          <span class="logo-icon">F</span>
+          Forecast
+        </a>
+        <div class="header-actions">
+          <button class="wallet-btn connected">
+            <span class="wallet-dot"></span>
+            0xA1…b2 <span style="color:var(--muted);font-size:11px;font-weight:400;">$1,247.32 USDC</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="app-main">
+      <h1 class="t-h1 mb-4">My Portfolio</h1>
+
+      <!-- Summary -->
+      <div class="portfolio-summary">
+        <div class="summary-card">
+          <div class="summary-label">Total Staked</div>
+          <div class="summary-value">$2,835.00</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Total Won</div>
+          <div class="summary-value positive">+$1,624.50</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Net P&amp;L</div>
+          <div class="summary-value positive">+$1,624.50</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" data-tabs>
+        <button class="tab active" data-tab="active">Active Positions</button>
+        <button class="tab" data-tab="history">History</button>
+      </div>
+
+      <!-- Active positions -->
+      <div data-tab-content="active">
+        <!-- Card 1 -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/sports1/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will Real Madrid win the 2026 Champions League final?</div>
+            <div class="position-detail">
+              Staked <strong>$200.00</strong> on <strong>Yes — Real Madrid wins</strong>
+              <span class="status-badge open" style="margin-left:8px;"><span class="status-dot"></span>Open</span>
+            </div>
+          </div>
+          <div>
+            <div class="position-pool-bar"><div class="position-pool-fill" style="width:62%"></div></div>
+            <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:2px;">62% pool share</div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value">$200.00</div>
+            <div style="font-size:11px;color:var(--muted);">staked</div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/politics1/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will the Fed cut rates at the June 2026 meeting?</div>
+            <div class="position-detail">
+              Staked <strong>$350.00</strong> on <strong>Yes — rates cut</strong>
+              <span class="status-badge open" style="margin-left:8px;"><span class="status-dot"></span>Open</span>
+            </div>
+          </div>
+          <div>
+            <div class="position-pool-bar"><div class="position-pool-fill" style="width:71%"></div></div>
+            <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:2px;">71% pool share</div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value">$350.00</div>
+            <div style="font-size:11px;color:var(--muted);">staked</div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/crypto1/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will Solana surpass $500 before July 2026?</div>
+            <div class="position-detail">
+              Staked <strong>$125.00</strong> on <strong>No — stays below $500</strong>
+              <span class="status-badge resolving" style="margin-left:8px;"><span class="status-spin"></span>Resolving</span>
+            </div>
+          </div>
+          <div>
+            <div class="position-pool-bar"><div class="position-pool-fill" style="width:56%"></div></div>
+            <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:2px;">56% pool share</div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value">$125.00</div>
+            <div style="font-size:11px;color:var(--muted);">staked</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div data-tab-content="history" style="display:none;">
+        <!-- Won -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/crypto2/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will BTC exceed $100K before March 2026?</div>
+            <div class="position-detail">
+              Staked <strong>$500.00</strong> on <strong>Yes</strong> · settled Apr 2
+              <span class="status-badge settled" style="margin-left:8px;"><span>✓</span>Settled</span>
+            </div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value won">+$812.50</div>
+            <div style="font-size:11px;color:var(--muted);">payout: $1,312.50</div>
+          </div>
+        </div>
+
+        <!-- Lost -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/sports3/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will Arsenal win the 2025-26 Premier League?</div>
+            <div class="position-detail">
+              Staked <strong>$300.00</strong> on <strong>Yes</strong> · settled May 18
+              <span class="status-badge settled" style="margin-left:8px;"><span>✓</span>Settled</span>
+            </div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value lost">-$300.00</div>
+            <div style="font-size:11px;color:var(--muted);">payout: $0.00</div>
+          </div>
+        </div>
+
+        <!-- Won -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/politics2/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will the US Fed hold rates steady at Jan 2026 meeting?</div>
+            <div class="position-detail">
+              Staked <strong>$200.00</strong> on <strong>Yes — hold</strong> · settled Jan 30
+              <span class="status-badge settled" style="margin-left:8px;"><span>✓</span>Settled</span>
+            </div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value won">+$312.00</div>
+            <div style="font-size:11px;color:var(--muted);">payout: $512.00</div>
+          </div>
+        </div>
+
+        <!-- Won -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/sports4/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will the Super Bowl have over 50M viewers?</div>
+            <div class="position-detail">
+              Staked <strong>$100.00</strong> on <strong>Yes</strong> · settled Feb 10
+              <span class="status-badge settled" style="margin-left:8px;"><span>✓</span>Settled</span>
+            </div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value won">+$500.00</div>
+            <div style="font-size:11px;color:var(--muted);">payout: $600.00</div>
+          </div>
+        </div>
+
+        <!-- Lost -->
+        <div class="position-card">
+          <div class="position-card-thumb">
+            <img src="https://picsum.photos/seed/crypto3/96/96" alt="" loading="lazy" />
+          </div>
+          <div class="position-info">
+            <div class="position-question">Will a US spot Ether ETF be approved before Q2 2026?</div>
+            <div class="position-detail">
+              Staked <strong>$150.00</strong> on <strong>Yes — approved</strong> · settled Apr 1
+              <span class="status-badge settled" style="margin-left:8px;"><span>✓</span>Settled</span>
+            </div>
+          </div>
+          <div class="position-amount">
+            <div class="position-value lost">-$150.00</div>
+            <div style="font-size:11px;color:var(--muted);">payout: $0.00</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

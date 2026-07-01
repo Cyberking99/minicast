@@ -1,0 +1,853 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================================================
+   MiniCast — Structured Brutalism Meets Precision Fintech
+   Typography: Syne (800 weight headlines) & Space Mono (tabular data & prose)
+   Color Restraint: Amber (#C8860A) carries interaction.
+   Gradients, soft shadows, rounded corners, and soft animations are removed.
+   =========================================================== */
+
+/* ---- Fonts ---------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@800&display=swap');
+
+/* ---- Tokens: Light Mode --------------------------------------- */
+:root {
+  --bg:           #F5F2ED; /* Warm off-white */
+  --surface:      #FFFFFF;
+  --fg:           #0E0E0E; /* Near-black */
+  --muted:        #6C6C6C; /* Desaturated gray */
+  --border:       #0E0E0E; /* Thick solid border */
+  --border-soft:  #CCCCCC;
+  --accent:       #C8860A; /* Raw Amber */
+  --accent-soft:  #FFF6E5;
+  
+  /* Desaturated Statuses */
+  --green:        #4A4A4A;
+  --green-soft:   #EBEBEB;
+  --red:          #5E5E5E;
+  --red-soft:     #EBEBEB;
+
+  --radius-sm:    0px; /* Zero rounded corners for Brutalism */
+  --radius-md:    0px;
+  --radius-lg:    0px;
+
+  --font:         'Space Mono', monospace; /* Default text in mono for precision fintech */
+  --font-display: 'Syne', sans-serif;
+  --font-mono:    'Space Mono', monospace;
+
+  --header-h:     60px;
+  --content-max:  1200px;
+}
+
+/* ---- Tokens: Dark Mode ---------------------------------------- */
+[data-theme="dark"] {
+  --bg:           #0E0E0E; /* Near-black */
+  --surface:      #161616;
+  --fg:           #F5F2ED; /* Warm off-white */
+  --muted:        #8E8E8E;
+  --border:       #F5F2ED;
+  --border-soft:  #2C2C2C;
+  --accent:       #C8860A;
+  --accent-soft:  #2B1E05;
+  
+  --green:        #A5A5A5;
+  --green-soft:   #232323;
+  --red:          #B5B5B5;
+  --red-soft:     #232323;
+}
+
+/* ---- Resets & Basics ----------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+/* Typography Rules */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 800; /* Syne only has 800 weight imported */
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+/* Text selections */
+::selection {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--accent);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---- Focus States (Brutalist Accessibility) ------------------ */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 2px;
+}
+
+/* ---- App Shell Layout ----------------------------------------- */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-h);
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+}
+
+.app-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--fg);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  background: var(--accent);
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-main {
+  flex: 1;
+  max-width: var(--content-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+/* ---- Asymmetric Feed Layout ---------------------------------- */
+.asymmetric-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.featured-row {
+  width: 100%;
+}
+
+.grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .grid-row {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* ---- Brutalist Components ------------------------------------- */
+.brutalist-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  padding: 28px;
+  position: relative;
+  transition: none; /* Instant feedback */
+}
+.brutalist-card:hover {
+  border-color: var(--accent);
+}
+
+/* Featured card specifics */
+.featured-card {
+  border-width: 3px;
+  background: var(--surface);
+  padding: 40px;
+}
+
+/* Typographic pool cards */
+.pool-card-question {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1.1;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  color: var(--fg);
+}
+
+.featured-card .pool-card-question {
+  font-size: 38px;
+  line-height: 1.05;
+}
+
+.pool-card-options-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.pool-card-option-item {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+  border: 1px solid var(--border-soft);
+  padding: 4px 10px;
+}
+
+.pool-card-meta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-top: 1px solid var(--border-soft);
+  padding-top: 14px;
+}
+
+/* ---- Buttons -------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  padding: 10px 20px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+  text-decoration: none;
+  transition: none; /* Instant state change */
+}
+
+.btn-primary {
+  background: var(--border);
+  color: var(--bg);
+}
+.btn-primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--border);
+}
+.btn-secondary:hover {
+  background: var(--border);
+  color: var(--bg);
+}
+
+.btn-block {
+  width: 100%;
+  display: flex;
+  padding: 14px;
+}
+
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+}
+.btn-accent:hover {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+
+/* ---- Stake Bar (The Signature Element) ------------------------- */
+.stake-bar-container {
+  margin: 24px 0;
+  font-family: var(--font-mono);
+}
+
+.stake-bar-line {
+  position: relative;
+  height: 2px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
+.stake-bar-tick {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 10px;
+  background: var(--border);
+}
+
+.stake-bar-label-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--fg);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.stake-bar-label-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Resolved states */
+.stake-bar-winning-solid {
+  position: absolute;
+  top: -2px;
+  height: 6px;
+  background: var(--accent);
+  border: 1px solid var(--border);
+}
+.stake-bar-losing-outline {
+  position: absolute;
+  top: -2px;
+  height: 6px;
+  background: transparent;
+  border: 1px dashed var(--border);
+}
+
+/* ---- Pool Detail Hero & Grid ---------------------------------- */
+.pool-detail-hero {
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 40px;
+  margin-bottom: 40px;
+}
+
+.pool-detail-question-wrap {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.pool-detail-question {
+  font-family: var(--font-display);
+  font-size: 46px;
+  line-height: 1.05;
+  font-weight: 800;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .pool-detail-question {
+    font-size: 32px;
+  }
+}
+
+.pool-detail-countdown {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.pool-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 60px;
+}
+
+@media (max-width: 900px) {
+  .pool-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* ---- Stake Panel Overhaul -------------------------------------- */
+.stake-panel-col {
+  border-left: 2px solid var(--border);
+  padding-left: 40px;
+}
+
+@media (max-width: 900px) {
+  .stake-panel-col {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+.underlined-input-wrap {
+  position: relative;
+  margin: 32px 0;
+}
+
+.underlined-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border);
+  padding: 12px 0;
+  font-size: 32px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  outline: none;
+}
+
+.underlined-input:focus {
+  border-color: var(--accent);
+}
+
+.math-formula {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin: 16px 0;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* ---- Oracle Verdict Pull-Quote ------------------------------- */
+.oracle-pull-quote {
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.5;
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+  margin: 24px 0;
+  color: var(--fg);
+}
+
+.oracle-confidence-bar {
+  height: 4px;
+  background: var(--border-soft);
+  margin: 12px 0 24px;
+  position: relative;
+}
+
+.oracle-confidence-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.footnote-links {
+  margin-top: 32px;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 16px;
+  font-size: 11px;
+  color: var(--muted);
+  list-style: decimal inside;
+}
+
+.footnote-links li {
+  margin-bottom: 6px;
+}
+
+/* ---- My Portfolio Redesign ------------------------------------ */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 48px;
+}
+
+@media (max-width: 768px) {
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.portfolio-sidebar-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.portfolio-filter-btn {
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 18px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+}
+.portfolio-filter-btn.active {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+/* Won / Lost typography */
+.amount-won {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.amount-lost {
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+  color: var(--muted);
+}
+
+/* ---- Modals (Strict Overlays) --------------------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(14, 14, 14, 0.95); /* Strict solid 95% opacity backdrop */
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+[data-theme="dark"] .modal-overlay {
+  background: rgba(14, 14, 14, 0.96);
+}
+
+.modal-content {
+  background: var(--bg);
+  border: 3px solid var(--border);
+  width: 100%;
+  max-width: 640px;
+  max-height: 80vh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: 40px;
+  position: relative;
+}
+
+/* ---- Status Badge overrides ----------------------------------- */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1.5px solid var(--border);
+  font-weight: 700;
+  color: var(--fg);
+  background: var(--surface);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--border);
+}
+
+.status-spin {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+
+/* Filter bar brutalist override */
+.filter-bar {
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+}
+
+.filter-chip {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 12px;
+  border: 1.5px solid var(--border);
+  padding: 6px 12px;
+  background: var(--surface);
+  color: var(--fg);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.filter-chip.active {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+}
+
+/* Forms styling */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+  border-radius: 0;
+  outline: none;
+}
+.form-input:focus {
+  border-color: var(--accent);
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.fee-preview {
+  border: 2px dashed var(--border) !important;
+  border-radius: 0 !important;
+  background: var(--surface) !important;
+}
+
+.theme-toggle-btn {
+  border: 1.5px solid var(--border);
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ---- Wallet Button Styling ------------------------------------ */
+.wallet-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.wallet-btn:hover {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+}
+.wallet-dot {
+  width: 6px;
+  height: 6px;
+  background: #55FF55; /* Connected green dot */
+  display: inline-block;
+}
+.wallet-btn.connecting .wallet-dot {
+  background: var(--accent);
+}
+
+/* ===========================================================
+   MiniPay & Mobile Viewport Compatibility (360x640 canvas)
+   =========================================================== */
+@media (max-width: 480px) {
+  html {
+    font-size: 13px; /* Scale down typography base */
+  }
+  
+  .app-shell {
+    padding-bottom: 60px; /* Prevent fixed bottom nav bar from covering content */
+  }
+
+  .app-header {
+    padding: 0 12px;
+    height: var(--header-h);
+  }
+  
+  .logo {
+    font-size: 18px;
+    gap: 4px;
+  }
+
+  .logo-icon {
+    padding: 1px 6px;
+  }
+
+  /* Fixed bottom bar for primary links */
+  .header-actions .btn {
+    position: fixed;
+    bottom: 0;
+    z-index: 1000;
+    height: 52px;
+    margin: 0 !important;
+    border-radius: 0;
+    border-top: 2px solid var(--border);
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .header-actions .btn-secondary {
+    left: 0;
+    width: 50%;
+    border-right: 1px solid var(--border);
+  }
+  
+  .header-actions .btn-primary {
+    right: 0;
+    width: 50%;
+    border-left: 1px solid var(--border);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .theme-toggle-btn {
+    padding: 5px 8px;
+    font-size: 9px;
+  }
+
+  .wallet-btn {
+    padding: 5px 8px;
+    font-size: 9px;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .app-main {
+    padding: 24px 16px;
+  }
+  
+  .filter-bar {
+    padding: 12px 16px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+  }
+  
+  .filter-bar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for a native look */
+  }
+  
+  .filter-chip {
+    flex-shrink: 0;
+  }
+  
+  .pool-detail-question-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .pool-detail-question {
+    font-size: 22px;
+  }
+  
+  .pool-detail-countdown {
+    font-size: 36px;
+    text-align: left;
+  }
+  
+  .pool-detail-grid {
+    gap: 24px;
+  }
+  
+  .brutalist-card {
+    padding: 16px;
+  }
+  
+  .featured-card {
+    padding: 24px 16px;
+  }
+  
+  .pool-card-question {
+    font-size: 20px;
+  }
+  
+  .featured-card .pool-card-question {
+    font-size: 24px;
+  }
+  
+  .modal-content {
+    padding: 24px 16px;
+    max-height: 90vh;
+  }
+
+  .portfolio-grid {
+    gap: 20px;
+  }
+}

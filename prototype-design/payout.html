@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forecast — Pool Settled</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .payout-icon-ring {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .payout-icon-ring svg {
+      width: 36px;
+      height: 36px;
+      color: var(--green);
+    }
+    .payout-total {
+      font-size: 56px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+      color: var(--green);
+      margin-bottom: 4px;
+    }
+    .payout-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .payout-detail-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      max-width: 480px;
+      width: 100%;
+      text-align: left;
+    }
+    .payout-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .payout-detail-row:last-child { border-bottom: 0; }
+    .payout-detail-label { color: var(--muted); }
+    .payout-detail-value { font-weight: 600; text-align: right; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Minimal header -->
+    <header class="app-header">
+      <div class="app-header-inner">
+        <a href="home.html" class="logo">
+          <span class="logo-icon">F</span>
+          Forecast
+        </a>
+        <div class="header-actions">
+          <button class="wallet-btn connected">
+            <span class="wallet-dot"></span>
+            0xA1…b2 <span style="color:var(--muted);font-size:11px;font-weight:400;">$2,871.82 USDC</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="app-main">
+      <div class="payout-screen">
+        <div class="payout-icon-ring">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+
+        <div class="payout-total">+$812.50</div>
+        <div class="payout-sub">Your stake of $500.00 returned $1,312.50</div>
+
+        <!-- Detail card -->
+        <div class="payout-detail-card">
+          <div class="payout-detail-row">
+            <span class="payout-detail-label">Pool</span>
+            <span class="payout-detail-value" style="font-size:13px;">Will BTC exceed $100K before March 2026?</span>
+          </div>
+          <div class="payout-detail-row">
+            <span class="payout-detail-label">Your option</span>
+            <span class="payout-detail-value">Yes — exceeds $100K</span>
+          </div>
+          <div class="payout-detail-row">
+            <span class="payout-detail-label">Your stake</span>
+            <span class="payout-detail-value">$500.00</span>
+          </div>
+          <div class="payout-detail-row">
+            <span class="payout-detail-label">Payout</span>
+            <span class="payout-detail-value" style="color:var(--green);">$1,312.50</span>
+          </div>
+          <div class="payout-detail-row">
+            <span class="payout-detail-label">Net return</span>
+            <span class="payout-detail-value" style="color:var(--green);">+$812.50 (162%)</span>
+          </div>
+        </div>
+
+        <!-- Oracle Verdict -->
+        <div class="oracle-verdict" style="max-width:480px;width:100%;margin-top:16px;">
+          <div class="oracle-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            Oracle Verdict · Venice AI
+            <span style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--green);">92%</span>
+          </div>
+          <div class="oracle-reasoning">
+            Bitcoin closed above $100K on March 15, 2026, reaching $102,430. The trigger condition was met with 28 days remaining in the prediction window. Price action confirmed by CoinMarketCap and CoinGecko indices.
+          </div>
+        </div>
+
+        <!-- Transaction hash -->
+        <div class="payout-tx" style="margin-top:16px;">
+          Tx: 0x7a1b…e4f2
+          <button style="margin-left:8px;color:var(--accent);cursor:pointer;font-family:var(--font-mono);font-size:12px;background:none;border:none;">Copy</button>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="btn-share">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share Result
+          </button>
+          <a href="home.html" class="btn btn-primary">Browse More Pools</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

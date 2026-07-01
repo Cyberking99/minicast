@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forecast — Create Prediction</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-header-inner">
+        <a href="home.html" class="logo">
+          <span class="logo-icon">F</span>
+          Forecast
+        </a>
+        <div class="header-actions">
+          <button class="wallet-btn"><span class="wallet-dot"></span> Connect Wallet</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="app-main" style="max-width:680px;">
+      <div style="margin-bottom:24px;">
+        <a href="home.html" style="font-size:13px;color:var(--muted);">← Back to Feed</a>
+      </div>
+
+      <h1 class="t-h1 mb-4">Create a Prediction</h1>
+
+      <div data-create-form>
+        <!-- Form view -->
+        <div data-form-view>
+          <!-- Question -->
+          <div class="form-group">
+            <label class="form-label">Question</label>
+            <textarea class="form-input form-textarea" placeholder="e.g. Will BTC exceed $150K before Dec 2026?" style="min-height:64px;font-size:17px;font-weight:600;"></textarea>
+          </div>
+
+          <!-- Options -->
+          <div class="form-group" data-dynamic-options>
+            <label class="form-label">Outcome Options</label>
+            <div class="option-list">
+              <div class="option-row">
+                <input class="form-input" type="text" placeholder="Option 1" value="Yes — the event happens" />
+                <button class="option-remove" type="button" aria-label="Remove option">✕</button>
+              </div>
+              <div class="option-row">
+                <input class="form-input" type="text" placeholder="Option 2" value="No — the event does not happen" />
+                <button class="option-remove" type="button" aria-label="Remove option">✕</button>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm btn-add-option" type="button" style="margin-top:6px;">+ Add option</button>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Minimum 2, maximum 10 options</div>
+          </div>
+
+          <!-- Deadlines -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Stake Deadline</label>
+              <input class="form-input" type="datetime-local" value="2026-07-01T00:00" />
+              <div style="display:flex;gap:4px;margin-top:6px;">
+                <button class="btn btn-ghost btn-sm" data-date-preset="3">3 days</button>
+                <button class="btn btn-ghost btn-sm" data-date-preset="7">1 week</button>
+                <button class="btn btn-ghost btn-sm" data-date-preset="14">2 weeks</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Resolution Deadline</label>
+              <input class="form-input" type="datetime-local" value="2026-07-15T00:00" />
+              <div style="display:flex;gap:4px;margin-top:6px;">
+                <button class="btn btn-ghost btn-sm" data-date-preset="7">1 week</button>
+                <button class="btn btn-ghost btn-sm" data-date-preset="30">30 days</button>
+                <button class="btn btn-ghost btn-sm" data-date-preset="90">90 days</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fee preview -->
+          <div class="fee-preview">
+            <span>Protocol fee</span>
+            <span style="font-weight:600;">1% of total pool</span>
+          </div>
+
+          <!-- Preview button -->
+          <button class="btn btn-primary btn-lg btn-full btn-preview-pool" type="button" style="margin-top:20px;">
+            Preview Prediction
+          </button>
+        </div>
+
+        <!-- Preview view (hidden initially) -->
+        <div data-preview-view style="display:none;">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:24px;">
+            <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:16px;">Preview</div>
+
+            <div class="t-h3 mb-2">Will BTC exceed $150K before Dec 2026?</div>
+
+            <div style="margin-bottom:16px;">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Options</div>
+              <div class="option-cards" style="grid-template-columns:1fr 1fr;">
+                <div class="option-card" style="cursor:default;">
+                  <div class="option-card-name" style="font-size:13px;">Yes — exceeds $150K</div>
+                </div>
+                <div class="option-card" style="cursor:default;">
+                  <div class="option-card-name" style="font-size:13px;">No — stays below $150K</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:2px;">Stake Deadline</div>
+                <div style="font-size:14px;font-weight:600;">Jul 1, 2026 · 12:00 AM</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:2px;">Resolution Deadline</div>
+                <div style="font-size:14px;font-weight:600;">Jul 15, 2026 · 12:00 AM</div>
+              </div>
+            </div>
+
+            <div class="fee-preview" style="margin-top:16px;">
+              <span>Protocol fee</span>
+              <span style="font-weight:600;">1% of total pool</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;">
+            <button class="btn btn-secondary btn-lg btn-back-edit" type="button" style="flex:1;">Edit</button>
+            <button class="btn btn-primary btn-lg btn-full btn-preview-pool" type="button" style="flex:2;" onclick="this.classList.add('loading');this.setAttribute('disabled','');setTimeout(function(){alert('Prediction pool created!');window.location.href='pool-detail.html';},1200);">
+              Submit Prediction
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

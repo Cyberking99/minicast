@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pool {
+  id                  String   @id // bytes32 hex
+  question            String
+  options             String[]
+  stakeDeadline       DateTime
+  resolutionDeadline  DateTime
+  disputeWindowSecs   Int
+  feeBps              Int
+  status              PoolStatus @default(OPEN)
+  winningOptionId     Int?
+  verdictHash         String?
+  verdictJson         String? // stored off-chain for transparency
+  settleTxHash        String?
+  totalPool           BigInt   @default(0)
+  creatorAddress      String
+  createdAt           DateTime @default(now())
+  stakes              Stake[]
+}
+
+model Stake {
+  id           String   @id @default(cuid())
+  poolId       String
+  pool         Pool     @relation(fields: [poolId], references: [id])
+  staker       String   // wallet address
+  optionId     Int
+  amount       BigInt
+  txHash       String
+  createdAt    DateTime @default(now())
+  payout       BigInt?
+  payoutTxHash String?
+}
+
+enum PoolStatus {
+  OPEN
+  LOCKED
+  RESOLVED
+  DISPUTED
+  SETTLED
+  UNRESOLVABLE
+}

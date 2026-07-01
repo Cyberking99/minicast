@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forecast — Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Home-specific styles */
+    .trending-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+    .pool-card-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .pool-card-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .pool-card-option-bar {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .pool-card-option-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s;
+    }
+    .pool-card-option-pct {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      width: 36px;
+      text-align: right;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-header-inner">
+        <a href="home.html" class="logo">
+          <span class="logo-icon">F</span>
+          Forecast
+        </a>
+        <div class="header-actions">
+          <button class="wallet-btn"><span class="wallet-dot"></span> Connect Wallet</button>
+          <a href="create-pool.html" class="btn btn-primary">Create Prediction</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Filter bar -->
+    <nav class="filter-bar">
+      <div class="filter-bar-inner">
+        <button class="filter-chip active">All</button>
+        <button class="filter-chip">Sports</button>
+        <button class="filter-chip">Crypto</button>
+        <button class="filter-chip">Politics</button>
+        <button class="filter-chip">Culture</button>
+        <button class="filter-chip">Tech</button>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="app-main" data-pool-feed>
+      <!-- Trending -->
+      <section class="category-section">
+        <div class="category-section-header">
+          <span class="trending-dot"></span>
+          <h2>Trending</h2>
+        </div>
+        <div class="section-grid section-grid-2">
+          <!-- Card 1 -->
+          <div class="pool-card" data-category="Sports">
+            <div class="pool-card-row">
+              <div class="pool-card-thumb">
+                <img src="https://picsum.photos/seed/sports1/176/132" alt="" loading="lazy" />
+              </div>
+              <div class="pool-card-body">
+                <div class="pool-card-header" style="margin-bottom:8px;">
+                  <span class="pool-card-question">Will Real Madrid win the 2026 Champions League final?</span>
+                  <span class="status-badge open"><span class="status-dot"></span>Open</span>
+                </div>
+                <div class="stake-bar">
+                  <div class="stake-bar-segment" style="width:62%">
+                    <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+                    <span class="stake-bar-segment-label">62% Yes</span>
+                    <div class="stake-bar-tooltip">$124.8K · 431 stakers</div>
+                  </div>
+                  <div class="stake-bar-segment" style="width:38%">
+                    <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+                    <span class="stake-bar-segment-label">38%</span>
+                    <div class="stake-bar-tooltip">$76.2K · 284 stakers</div>
+                  </div>
+                </div>
+                <div class="pool-card-meta">
+                  <span>💰 $201.0K pool</span>
+                  <span>⏱ 14d 6h left</span>
+                  <span>👥 715 stakers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="pool-card" data-category="Crypto">
+            <div class="pool-card-row">
+              <div class="pool-card-thumb">
+                <img src="https://picsum.photos/seed/crypto1/176/132" alt="" loading="lazy" />
+              </div>
+              <div class="pool-card-body">
+                <div class="pool-card-header" style="margin-bottom:8px;">
+                  <span class="pool-card-question">Will Solana surpass $500 before July 2026?</span>
+                  <span class="status-badge open"><span class="status-dot"></span>Open</span>
+                </div>
+                <div class="stake-bar">
+                  <div class="stake-bar-segment" style="width:44%">
+                    <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+                    <span class="stake-bar-segment-label">44% Yes</span>
+                    <div class="stake-bar-tooltip">$56.2K · 213 stakers</div>
+                  </div>
+                  <div class="stake-bar-segment" style="width:56%">
+                    <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+                    <span class="stake-bar-segment-label">56% No</span>
+                    <div class="stake-bar-tooltip">$72.1K · 298 stakers</div>
+                  </div>
+                </div>
+                <div class="pool-card-meta">
+                  <span>💰 $128.3K pool</span>
+                  <span>⏱ 38d 2h left</span>
+                  <span>👥 511 stakers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Closing Soon -->
+      <section class="category-section">
+        <div class="category-section-header">
+          <h2>Closing Soon</h2>
+          <span style="color:var(--amber);font-size:12px;font-weight:600;">·</span>
+        </div>
+        <div class="section-grid section-grid-2">
+          <!-- Card 3 -->
+          <div class="pool-card" data-category="Politics">
+            <div class="pool-card-row">
+              <div class="pool-card-thumb">
+                <img src="https://picsum.photos/seed/politics1/176/132" alt="" loading="lazy" />
+              </div>
+              <div class="pool-card-body">
+                <div class="pool-card-header" style="margin-bottom:8px;">
+                  <span class="pool-card-question">Will the Fed cut rates at the June 2026 meeting?</span>
+                  <span class="status-badge open"><span class="status-dot"></span>Open</span>
+                </div>
+                <div class="stake-bar">
+                  <div class="stake-bar-segment" style="width:71%">
+                    <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+                    <span class="stake-bar-segment-label">71% Yes</span>
+                    <div class="stake-bar-tooltip">$210.4K · 892 stakers</div>
+                  </div>
+                  <div class="stake-bar-segment" style="width:29%">
+                    <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+                    <span class="stake-bar-segment-label">29%</span>
+                    <div class="stake-bar-tooltip">$86.1K · 345 stakers</div>
+                  </div>
+                </div>
+                <div class="pool-card-meta">
+                  <span>💰 $296.5K pool</span>
+                  <span style="color:var(--amber);font-weight:600;">⏱ 2h 45m left</span>
+                  <span>👥 1,237 stakers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="pool-card" data-category="Culture">
+            <div class="pool-card-row">
+              <div class="pool-card-thumb">
+                <img src="https://picsum.photos/seed/film1/176/132" alt="" loading="lazy" />
+              </div>
+              <div class="pool-card-body">
+                <div class="pool-card-header" style="margin-bottom:8px;">
+                  <span class="pool-card-question">Will the new Christopher Nolan film gross over $800M globally?</span>
+                  <span class="status-badge open"><span class="status-dot"></span>Open</span>
+                </div>
+                <div class="stake-bar">
+                  <div class="stake-bar-segment" style="width:35%">
+                    <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+                    <span class="stake-bar-segment-label">35% Yes</span>
+                    <div class="stake-bar-tooltip">$18.3K · 94 stakers</div>
+                  </div>
+                  <div class="stake-bar-segment" style="width:65%">
+                    <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+                    <span class="stake-bar-segment-label">65% No</span>
+                    <div class="stake-bar-tooltip">$34.0K · 172 stakers</div>
+                  </div>
+                </div>
+                <div class="pool-card-meta">
+                  <span>💰 $52.3K pool</span>
+                  <span>⏱ 6h 20m left</span>
+                  <span>👥 266 stakers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newly Created -->
+      <section class="category-section">
+        <div class="category-section-header">
+          <h2>Newly Created</h2>
+        </div>
+        <div class="section-grid section-grid-2">
+          <!-- Card 5 -->
+          <div class="pool-card" data-category="Tech">
+            <div class="pool-card-row">
+              <div class="pool-card-thumb">
+                <img src="https://picsum.photos/seed/tech1/176/132" alt="" loading="lazy" />
+              </div>
+              <div class="pool-card-body">
+                <div class="pool-card-header" style="margin-bottom:8px;">
+                  <span class="pool-card-question">Will OpenAI announce GPT-5 before Q3 2026?</span>
+                  <span class="status-badge open"><span class="status-dot"></span>Open</span>
+                </div>
+                <div class="stake-bar">
+                  <div class="stake-bar-segment" style="width:55%">
+                    <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+                    <span class="stake-bar-segment-label">55% Yes</span>
+                    <div class="stake-bar-tooltip">$8.9K · 42 stakers</div>
+                  </div>
+                  <div class="stake-bar-segment" style="width:45%">
+                    <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+                    <span class="stake-bar-segment-label">45%</span>
+                    <div class="stake-bar-tooltip">$7.3K · 38 stakers</div>
+                  </div>
+                </div>
+                <div class="pool-card-meta">
+                  <span>💰 $16.2K pool</span>
+                  <span>⏱ 89d 0h left</span>
+                  <span>👥 80 stakers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="pool-card" data-category="Sports">
+            <div class="pool-card-row">
+              <div class="pool-card-thumb">
+                <img src="https://picsum.photos/seed/sports2/176/132" alt="" loading="lazy" />
+              </div>
+              <div class="pool-card-body">
+                <div class="pool-card-header" style="margin-bottom:8px;">
+                  <span class="pool-card-question">Will Wembanyama win 2027 NBA MVP?</span>
+                  <span class="status-badge open"><span class="status-dot"></span>Open</span>
+                </div>
+                <div class="stake-bar">
+                  <div class="stake-bar-segment" style="width:78%">
+                    <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+                    <span class="stake-bar-segment-label">78% Yes</span>
+                    <div class="stake-bar-tooltip">$12.3K · 67 stakers</div>
+                  </div>
+                  <div class="stake-bar-segment" style="width:22%">
+                    <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+                    <span class="stake-bar-segment-label">22%</span>
+                    <div class="stake-bar-tooltip">$3.5K · 19 stakers</div>
+                  </div>
+                </div>
+                <div class="pool-card-meta">
+                  <span>💰 $15.8K pool</span>
+                  <span>⏱ 210d 0h left</span>
+                  <span>👥 86 stakers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

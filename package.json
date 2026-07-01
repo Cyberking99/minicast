@@ -1,0 +1,20 @@
+{
+  "name": "minicast",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "contracts",
+    "frontend",
+    "oracle"
+  ],
+  "scripts": {
+    "build:contracts": "npm run build -w contracts",
+    "test:contracts": "npm run test -w contracts",
+    "dev": "npm run dev -w frontend",
+    "dev:oracle": "npm run start -w oracle",
+    "build": "npm run build -w frontend"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-verify": "^2.0.3"
+  }
+}

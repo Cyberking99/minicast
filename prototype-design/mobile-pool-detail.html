@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=390, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Forecast — Pool Detail (Mobile)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { padding-bottom: 72px; }
+    .mobile-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .mobile-header-back {
+      width: 32px; height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--fg);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .mobile-header-title {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+    .mobile-question {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .mobile-pool-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .mobile-stake-trigger {
+      position: fixed;
+      bottom: 72px;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 40;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .mobile-stake-trigger .selected-info {
+      flex: 1;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    @media (max-width: 768px) {
+      .mobile-stake-trigger { display: flex; }
+    }
+    .mobile-bottom-sheet-content {
+      padding-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile header -->
+  <div class="mobile-header">
+    <a href="home.html" class="mobile-header-back">←</a>
+    <span class="mobile-header-title">Pool Detail</span>
+    <button class="wallet-btn" style="padding:4px 10px;font-size:12px;">
+      <span class="wallet-dot"></span>
+      0xA1…b2
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div style="padding:16px;">
+    <div class="pool-hero" style="height:140px;margin-bottom:12px;">
+      <img src="https://picsum.photos/seed/realmadrid-hero/780/280" alt="" loading="lazy" />
+    </div>
+    <div class="mobile-question">Will Real Madrid win the 2026 Champions League final?</div>
+    <div class="mobile-pool-meta">
+      <span class="status-badge open"><span class="status-dot"></span>Open</span>
+      <span class="countdown">⏱ 14d 6h</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:600;">$201.0K pool</span>
+    </div>
+
+    <!-- Stake bar (mobile friendly) -->
+    <div class="stake-bar" style="height:32px;margin-bottom:16px;">
+      <div class="stake-bar-segment" style="width:62%">
+        <div class="stake-bar-segment-bar" style="background:var(--accent)"></div>
+        <span class="stake-bar-segment-label" style="font-size:12px;">62% Yes</span>
+        <div class="stake-bar-tooltip">$124.8K · 431 stakers · 1.6x</div>
+      </div>
+      <div class="stake-bar-segment" style="width:38%">
+        <div class="stake-bar-segment-bar" style="background:var(--muted)"></div>
+        <span class="stake-bar-segment-label" style="font-size:12px;">38% No</span>
+        <div class="stake-bar-tooltip">$76.2K · 284 stakers · 2.6x</div>
+      </div>
+    </div>
+
+    <!-- Option cards (stacked on mobile) -->
+    <div class="option-cards">
+      <div class="option-card">
+        <div class="option-card-check">✓</div>
+        <div class="option-card-name" style="font-size:14px;">Yes — Real Madrid wins</div>
+        <div class="option-card-stats" style="font-size:12px;">
+          <span class="option-card-pct">62.1%</span>
+          <span class="option-card-odds">1.6x odds</span>
+        </div>
+      </div>
+      <div class="option-card">
+        <div class="option-card-check">✓</div>
+        <div class="option-card-name" style="font-size:14px;">No — any other team wins</div>
+        <div class="option-card-stats" style="font-size:12px;">
+          <span class="option-card-pct">37.9%</span>
+          <span class="option-card-odds">2.6x odds</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Analysis link -->
+    <button style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--muted);margin:16px 0;background:none;border:none;cursor:pointer;" onclick="document.getElementById('ai-sheet').classList.add('open')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 0 0-6-6z"/><circle cx="12" cy="9" r="2"/></svg>
+      Unlock AI Analysis
+    </button>
+
+    <!-- Activity -->
+    <div class="activity-heading">Recent Activity</div>
+    <div class="activity-feed">
+      <div class="activity-item" style="font-size:12px;">
+        <span class="activity-avatar" style="width:24px;height:24px;font-size:10px;">A1</span>
+        <span><strong>0xA1…b2</strong> staked <strong>$80.00</strong> on Yes</span>
+        <span style="margin-left:auto;color:var(--muted);font-size:11px;">4m</span>
+      </div>
+      <div class="activity-item" style="font-size:12px;">
+        <span class="activity-avatar" style="width:24px;height:24px;font-size:10px;">3F</span>
+        <span><strong>0x3F…9a</strong> staked <strong>$240.00</strong> on No</span>
+        <span style="margin-left:auto;color:var(--muted);font-size:11px;">12m</span>
+      </div>
+      <div class="activity-item" style="font-size:12px;">
+        <span class="activity-avatar" style="width:24px;height:24px;font-size:10px;">7C</span>
+        <span><strong>0x7C…4e</strong> staked <strong>$55.00</strong> on Yes</span>
+        <span style="margin-left:auto;color:var(--muted);font-size:11px;">27m</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed stake trigger (mobile) -->
+  <div class="mobile-stake-trigger">
+    <div class="selected-info">
+      <div style="font-size:11px;color:var(--muted);">Select an option</div>
+    </div>
+    <button class="btn btn-primary btn-lg" style="padding:10px 24px;font-size:14px;" onclick="document.getElementById('stake-sheet').classList.add('open')">
+      Place Stake
+    </button>
+  </div>
+
+  <!-- Bottom sheet: Stake Panel -->
+  <div class="bottom-sheet-overlay" id="stake-sheet">
+    <div class="bottom-sheet">
+      <div class="bottom-sheet-handle"></div>
+      <div class="mobile-bottom-sheet-content">
+        <div class="stake-panel" style="border:none;padding:0;">
+          <div class="stake-panel-header">Place Your Stake</div>
+          <div class="stake-option-label">
+            Selected option: <strong>—</strong>
+          </div>
+          <div class="stake-input-wrap">
+            <input class="stake-input" type="text" inputmode="decimal" placeholder="0" />
+            <span class="stake-input-suffix">USDC</span>
+          </div>
+          <div class="stake-live-feedback">
+            <div>Your share if you win: <strong class="stake-share t-num">$0.00</strong></div>
+            <div>Your implied odds: <strong class="stake-odds t-num">—</strong></div>
+          </div>
+          <button class="btn btn-primary btn-full stake-btn" disabled>Select an option to stake</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom sheet: AI Analysis -->
+  <div class="bottom-sheet-overlay" id="ai-sheet">
+    <div class="bottom-sheet">
+      <div class="bottom-sheet-handle"></div>
+      <div style="position:relative;" data-ai-locked>
+        <div class="modal-title" style="margin-top:8px;">AI Analysis Report</div>
+        <div class="blur-preview" data-ai-unlock>
+          <div class="gauge-bar">
+            <span class="gauge-label" style="width:80px;">Yes — Real</span>
+            <div class="gauge-track"><div class="gauge-fill" style="width:62%"></div></div>
+            <span class="gauge-value">62%</span>
+          </div>
+          <div class="gauge-bar">
+            <span class="gauge-label" style="width:80px;">No</span>
+            <div class="gauge-track"><div class="gauge-fill" style="width:38%"></div></div>
+            <span class="gauge-value">38%</span>
+          </div>
+          <div style="font-size:13px;line-height:1.6;color:var(--muted);margin:12px 0;">
+            Real Madrid enters the 2026 final with the strongest UCL campaign of any team this season — 9 wins, 1 draw, and a +18 goal differential across the knockout stage.
+          </div>
+          <div class="risk-indicator">
+            <span style="font-size:12px;font-weight:600;">Risk</span>
+            <div class="risk-bar"><div class="risk-fill medium" style="width:42%"></div></div>
+            <span class="risk-label">Medium</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);margin-top:8px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 0 0-6-6z"/><circle cx="12" cy="9" r="2"/></svg>
+            Powered by Venice AI · Private inference
+          </div>
+        </div>
+        <div class="blur-overlay">
+          <div style="text-align:center;">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;">AI Analysis Report</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Venice AI evaluates options, confidence, and risk</div>
+            <button class="btn btn-primary btn-pay-ai">Unlock for $0.50</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom tab bar (mobile) -->
+  <nav class="mobile-tabs" style="display:flex;">
+    <div class="mobile-tabs-inner">
+      <a href="home.html" class="mobile-tab active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Feed</span>
+      </a>
+      <a href="create-pool.html" class="mobile-tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Create</span>
+      </a>
+      <a href="mobile-portfolio.html" class="mobile-tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span>Portfolio</span>
+      </a>
+      <button class="mobile-tab" onclick="alert('Activity feed coming soon')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>Activity</span>
+      </button>
+      <button class="mobile-tab" onclick="alert('Profile coming soon')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </button>
+    </div>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>

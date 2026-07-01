@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forecast — Design System Spec</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .spec-shell { max-width:960px;margin:0 auto;padding:32px 24px 80px; }
+    .spec-h1 { font-size:32px;font-weight:700;letter-spacing:-0.03em;margin-bottom:4px; }
+    .spec-h2 { font-size:20px;font-weight:700;letter-spacing:-0.02em;margin:40px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border); }
+    .spec-h3 { font-size:16px;font-weight:600;margin:24px 0 12px; }
+    .spec-table { width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px; }
+    .spec-table th { text-align:left;padding:8px 12px;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border); }
+    .spec-table td { padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top; }
+    .spec-table tr:hover td { background:var(--bg); }
+    .spec-swatch { display:inline-block;width:16px;height:16px;border-radius:3px;vertical-align:middle;margin-right:6px;border:1px solid var(--border); }
+    .spec-color-cell { display:flex;align-items:center;gap:6px; }
+    .spec-tag { display:inline-flex;padding:1px 8px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:0.04em; }
+    .spec-tag.open { background:var(--green-soft);color:var(--green); }
+    .spec-tag.locked { background:var(--border);color:var(--muted); }
+    .spec-tag.resolving { background:var(--amber-soft);color:var(--amber); }
+    .spec-tag.settled { background:var(--border);color:var(--muted); }
+    .spec-code { font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:2px 6px;border-radius:3px; }
+    .spec-demo { display:inline-flex;margin:2px 4px; }
+  </style>
+</head>
+<body>
+  <div class="spec-shell">
+    <div style="margin-bottom:8px;"><a href="index.html" style="font-size:13px;color:var(--muted);">← Back to Gallery</a></div>
+    <div class="spec-h1">Design System Specification</div>
+    <p style="color:var(--muted);margin-bottom:32px;">Forecast — Prediction Pool Frontend</p>
+
+    <!-- 1. Color Tokens -->
+    <div class="spec-h2">1. Color Tokens</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">All tokens defined in OKLch for perceptual uniformity. Light and dark variants via <span class="spec-code">[data-theme="dark"]</span> overrides.</p>
+
+    <div class="spec-h3">Light Mode</div>
+    <table class="spec-table">
+      <thead>
+        <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="spec-code">--bg</span></td><td><span class="spec-swatch" style="background:oklch(97.5% 0.003 250);"></span>oklch(97.5% 0.003 250)</td><td>Page background — cool off-white</td></tr>
+        <tr><td><span class="spec-code">--surface</span></td><td><span class="spec-swatch" style="background:oklch(100% 0 0);border:1px solid #ddd;"></span>oklch(100% 0 0)</td><td>Card/surface backgrounds</td></tr>
+        <tr><td><span class="spec-code">--fg</span></td><td><span class="spec-swatch" style="background:oklch(18% 0.012 255);"></span>oklch(18% 0.012 255)</td><td>Primary text — near-black with cool tone</td></tr>
+        <tr><td><span class="spec-code">--muted</span></td><td><span class="spec-swatch" style="background:oklch(48% 0.01 255);"></span>oklch(48% 0.01 255)</td><td>Secondary text, captions, non-interactive icons</td></tr>
+        <tr><td><span class="spec-code">--border</span></td><td><span class="spec-swatch" style="background:oklch(90% 0.005 255);"></span>oklch(90% 0.005 255)</td><td>Borders, dividers, inactive bars</td></tr>
+        <tr><td><span class="spec-code">--accent</span></td><td><span class="spec-swatch" style="background:oklch(55% 0.12 250);"></span>oklch(55% 0.12 250)</td><td>Primary CTA buttons, selected states, active elements</td></tr>
+        <tr><td><span class="spec-code">--accent-hover</span></td><td><span class="spec-swatch" style="background:oklch(50% 0.14 250);"></span>oklch(50% 0.14 250)</td><td>Primary button hover state</td></tr>
+        <tr><td><span class="spec-code">--accent-soft</span></td><td><span class="spec-swatch" style="background:oklch(65% 0.08 250);"></span>oklch(65% 0.08 250)</td><td>Selected card backgrounds, filter chip active</td></tr>
+        <tr><td><span class="spec-code">--green</span></td><td><span class="spec-swatch" style="background:oklch(52% 0.14 150);"></span>oklch(52% 0.14 150)</td><td>Win, success, open status</td></tr>
+        <tr><td><span class="spec-code">--amber</span></td><td><span class="spec-swatch" style="background:oklch(65% 0.16 80);"></span>oklch(65% 0.16 80)</td><td>Warning, resolving status, countdown urgency</td></tr>
+        <tr><td><span class="spec-code">--red</span></td><td><span class="spec-swatch" style="background:oklch(50% 0.18 30);"></span>oklch(50% 0.18 30)</td><td>Loss, error, destructive actions</td></tr>
+      </tbody>
+    </table>
+
+    <div class="spec-h3">Dark Mode Overrides</div>
+    <table class="spec-table">
+      <thead>
+        <tr><th>Token</th><th>Value</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="spec-code">--bg</span></td><td><span class="spec-swatch" style="background:oklch(13% 0.008 255);"></span>oklch(13% 0.008 255)</td><td>Deep navy-slate background</td></tr>
+        <tr><td><span class="spec-code">--surface</span></td><td><span class="spec-swatch" style="background:oklch(17% 0.01 255);"></span>oklch(17% 0.01 255)</td><td>Cards slightly lighter than bg</td></tr>
+        <tr><td><span class="spec-code">--fg</span></td><td><span class="spec-swatch" style="background:oklch(92% 0.005 255);"></span>oklch(92% 0.005 255)</td><td>Near-white text</td></tr>
+        <tr><td><span class="spec-code">--accent</span></td><td><span class="spec-swatch" style="background:oklch(60% 0.14 250);"></span>oklch(60% 0.14 250)</td><td>Brighter cobalt for dark bg contrast</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Typography -->
+    <div class="spec-h2">2. Typography</div>
+    <table class="spec-table">
+      <thead><tr><th>Class</th><th>Size</th><th>Weight</th><th>Line Height</th><th>Letter Spacing</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><span class="spec-code">.t-h1</span></td><td>clamp(28px, 3vw, 42px)</td><td>700</td><td>1.15</td><td>-0.03em</td><td>Page titles, pool question on detail</td></tr>
+        <tr><td><span class="spec-code">.t-h2</span></td><td>clamp(20px, 2vw, 28px)</td><td>700</td><td>1.2</td><td>-0.02em</td><td>Section headings</td></tr>
+        <tr><td><span class="spec-code">.t-h3</span></td><td>clamp(16px, 1.4vw, 20px)</td><td>600</td><td>1.25</td><td>-0.01em</td><td>Card titles, subheadings</td></tr>
+        <tr><td><span class="spec-code">.t-body</span></td><td>14px</td><td>400</td><td>1.5</td><td>0</td><td>Body text, descriptions</td></tr>
+        <tr><td><span class="spec-code">.t-body-lg</span></td><td>16px</td><td>400</td><td>1.5</td><td>0</td><td>Larger body, lead text</td></tr>
+        <tr><td><span class="spec-code">.t-caption</span></td><td>12px</td><td>400</td><td>1.4</td><td>0</td><td>Captions, timestamps, metadata</td></tr>
+        <tr><td><span class="spec-code">.t-mono</span></td><td>inherits</td><td>—</td><td>—</td><td>—</td><td>Monospace for addresses, hashes</td></tr>
+        <tr><td><span class="spec-code">.t-num</span></td><td>inherits</td><td>—</td><td>—</td><td>tabular-nums</td><td>Tabular figures for amounts, percentages</td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">
+      <strong>Family:</strong> <span class="spec-code">'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif</span> — single grotesque sans-serif across all surfaces as specified.
+      <br /><strong>Mono:</strong> <span class="spec-code">'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace</span> — for addresses, hashes, code.
+    </p>
+
+    <!-- 3. Spacing -->
+    <div class="spec-h2">3. Spacing Scale</div>
+    <table class="spec-table">
+      <thead><tr><th>Token / Class</th><th>Value</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><span class="spec-code">--header-h</span></td><td>56px</td><td>Fixed top header height</td></tr>
+        <tr><td><span class="spec-code">--filter-h</span></td><td>44px</td><td>Sticky category filter height</td></tr>
+        <tr><td><span class="spec-code">--content-max</span></td><td>1280px</td><td>Max content width</td></tr>
+        <tr><td><span class="spec-code">--radius-sm</span></td><td>6px</td><td>Small radii (mini bars, tooltips)</td></tr>
+        <tr><td><span class="spec-code">--radius-md</span></td><td>8px</td><td>Cards, inputs, buttons</td></tr>
+        <tr><td><span class="spec-code">--radius-lg</span></td><td>12px</td><td>Modals, bottom sheets</td></tr>
+        <tr><td><span class="spec-code">.gap-2</span></td><td>8px</td><td>Small flex gap</td></tr>
+        <tr><td><span class="spec-code">.gap-3</span></td><td>12px</td><td>Default flex gap</td></tr>
+        <tr><td><span class="spec-code">.gap-4</span></td><td>16px</td><td>Section spacing</td></tr>
+        <tr><td><span class="spec-code">.p-4</span></td><td>16px</td><td>Card padding</td></tr>
+        <tr><td><span class="spec-code">.mb-4</span></td><td>16px</td><td>Section bottom margin</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Component States -->
+    <div class="spec-h2">4. Button States</div>
+    <table class="spec-table">
+      <thead><tr><th>State</th><th>Primary (.btn-primary)</th><th>Secondary (.btn-secondary)</th><th>Ghost (.btn-ghost)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Default</strong></td>
+          <td><span class="spec-swatch" style="background:var(--accent);"></span>bg accent, white text</td>
+          <td><span class="spec-swatch" style="background:transparent;border:1px solid var(--border);"></span>transparent, border</td>
+          <td><span class="spec-swatch" style="background:transparent;"></span>transparent, muted text</td>
+        </tr>
+        <tr>
+          <td><strong>Hover</strong></td>
+          <td>bg accent-hover</td>
+          <td>bg var(--bg), border var(--muted)</td>
+          <td>bg var(--bg), fg</td>
+        </tr>
+        <tr>
+          <td><strong>Active / Pressed</strong></td>
+          <td><code>transform: scale(0.97)</code></td>
+          <td><code>transform: scale(0.97)</code></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>Disabled</strong></td>
+          <td>opacity 0.5, pointer-events none</td>
+          <td>opacity 0.5, pointer-events none</td>
+          <td>opacity 0.5, pointer-events none</td>
+        </tr>
+        <tr>
+          <td><strong>Loading</strong></td>
+          <td>text hidden, spinner ::after</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 5. Status Badge System -->
+    <div class="spec-h2">5. Status Badge System</div>
+    <table class="spec-table">
+      <thead><tr><th>Status</th><th>Visual</th><th>Token</th><th>Icon</th><th>When Used</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="spec-tag open">Open</span></td>
+          <td><span class="spec-swatch" style="background:var(--green-soft);border-color:var(--green);"></span>Green tint bg</td>
+          <td><span class="spec-code">--green</span> + <span class="spec-code">--green-soft</span></td>
+          <td>Pulsing dot</td>
+          <td>Pool accepting stakes</td>
+        </tr>
+        <tr>
+          <td><span class="spec-tag locked">Locked</span></td>
+          <td><span class="spec-swatch" style="background:var(--border);"></span>Neutral grey bg</td>
+          <td><span class="spec-code">--border</span> + <span class="spec-code">--muted</span></td>
+          <td>Clock icon (text)</td>
+          <td>Staking period ended, awaiting resolution</td>
+        </tr>
+        <tr>
+          <td><span class="spec-tag resolving">Resolving</span></td>
+          <td><span class="spec-swatch" style="background:var(--amber-soft);"></span>Amber tint bg</td>
+          <td><span class="spec-code">--amber</span> + <span class="spec-code">--amber-soft</span></td>
+          <td>Spinning indicator</td>
+          <td>Venice AI oracle processing</td>
+        </tr>
+        <tr>
+          <td><span class="spec-tag settled">Settled</span></td>
+          <td><span class="spec-swatch" style="background:var(--border);"></span>Neutral grey bg</td>
+          <td><span class="spec-code">--border</span> + <span class="spec-code">--muted</span></td>
+          <td>Checkmark</td>
+          <td>Pool resolved, payouts processed</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 6. Wallet Connection States -->
+    <div class="spec-h2">6. Wallet Connection States</div>
+    <table class="spec-table">
+      <thead><tr><th>State</th><th>Trigger</th><th>Visual</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Disconnected</strong></td><td>Initial state / logout</td><td>Grey dot + "Connect Wallet" label</td></tr>
+        <tr><td><strong>Connecting</strong></td><td>Click "Connect Wallet"</td><td>Amber spinning border + "Connecting…" (1.5s simulated delay)</td></tr>
+        <tr><td><strong>Connected</strong></td><td>Connection success</td><td>Green pulsing dot + truncated address (0xA1…b2) + USDC balance</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 7. Stake Bar Design -->
+    <div class="spec-h2">7. Stake Bar</div>
+    <table class="spec-table">
+      <thead><tr><th>Element</th><th>Spec</th></tr></thead>
+      <tbody>
+        <tr><td>Height (desktop)</td><td>28px (standard), 36px (pool detail hero bar)</td></tr>
+        <tr><td>Height (mobile)</td><td>32px (pool detail), 20px (card bars)</td></tr>
+        <tr><td>Segment colors</td><td>Winning/Yes option = accent blue, other options = muted grey</td></tr>
+        <tr><td>Labels</td><td>White text on dark segments, text-shadow for readability. Full label when &gt;30% width, truncated to % when narrower</td></tr>
+        <tr><td>Tooltip</td><td>Hover: shows $ amount, staker count, implied odds</td></tr>
+        <tr><td>Animation</td><td><code>transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1)</code></td></tr>
+      </tbody>
+    </table>
+
+    <!-- 8. Iconography Guidelines -->
+    <div class="spec-h2">8. Icon & Visual Language</div>
+    <ul style="font-size:13px;color:var(--muted);line-height:1.7;">
+      <li>Icons use Feather-style thin 2px strokes — clean, not decorative</li>
+      <li>No emoji as feature icons (emoji allowed only for inline reactions like pool countdown indicators)</li>
+      <li>No rounded pill buttons on every action — only primary CTA uses full rounding</li>
+      <li>No glass morphism, no glowing neon on dark, no floating orbs</li>
+      <li>No gradient backgrounds on panels or cards — reserved for Oracle Verdict header only</li>
+      <li>Avatar = truncated address with last 2 hex chars as initials in a circle</li>
+    </ul>
+  </div>
+</body>
+</html>
