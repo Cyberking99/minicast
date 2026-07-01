@@ -12,9 +12,9 @@ async function main() {
   if (chainId === 31337) {
     predictionPoolAddress = "0xD5ac451B0c50B9476107823Af206eD814a2e2580";
     usdcAddress = "0x18E317A7D70d8fBf8e6E893616b52390EbBdb629";
-  } else if (chainId === 84532) {
-    predictionPoolAddress = "0x807203F9b5bab0cd65fB94Db89728075d9E5Fe84";
-    usdcAddress = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
+  } else if (chainId === 11142220) {
+    predictionPoolAddress = "0x3E15a1974e39CD0e59b6F221b904aB926aEbAEbb";
+    usdcAddress = "0x01C5C0122039549AD1493B8220cABEdD739BC44E";
   } else {
     throw new Error("Unsupported network");
   }
@@ -68,20 +68,20 @@ async function main() {
     {
       title: "Who will win the match between Brazil and Morocco in the 2026 world cup?",
       options: ["Brazil wins", "Morocco wins"],
-      stakeTime: "2026-06-14T12:45:00+01:00",
-      resolveTime: "2026-06-14T12:48:00+01:00"
+      stakeTime: "2026-07-01T12:45:00+01:00",
+      resolveTime: "2026-07-01T12:48:00+01:00"
     },
     {
       title: "Who will win the match between Ivory Coast and Ecuador in the 2026 world cup on 15/06/2026?",
       options: ["Ivory Coast wins", "Ecuador wins"],
-      stakeTime: "2026-06-15T00:00:00+01:00",
-      resolveTime: "2026-06-15T02:30:00+01:00"
+      stakeTime: "2026-07-01T00:00:00+01:00",
+      resolveTime: "2026-07-01T02:30:00+01:00"
     },
     {
       title: "Will Germany win Curacao in the 2026 world cup on 14/06/2026?",
       options: ["Yes", "No"],
-      stakeTime: "2026-06-14T18:00:00+01:00",
-      resolveTime: "2026-06-14T22:00:00+01:00"
+      stakeTime: "2026-07-01T18:00:00+01:00",
+      resolveTime: "2026-07-01T22:00:00+01:00"
     }
   ];
 
