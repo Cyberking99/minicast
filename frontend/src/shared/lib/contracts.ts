@@ -10,7 +10,7 @@ export const CONTRACT_ADDRESSES = {
   11142220: {
     predictionPool: process.env.NEXT_PUBLIC_PREDICTION_POOL_ADDRESS as `0x${string}`,
     usdc: process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`,
-    deployedBlock: 29607011n,
+    deployedBlock: 29606750n,
   },
 } as const;
 
@@ -1294,15 +1294,15 @@ export const getUsdcAddress = () => CONTRACT_ADDRESSES[chainId].usdc;
 
 export async function fetchOnChainPools() {
   const address = getPredictionPoolAddress();
-  
+
   try {
     const startBlock = CONTRACT_ADDRESSES[chainId].deployedBlock;
     const latest = await publicClient.getBlockNumber();
-    
-    // Celo Sepolia RPC has a query range limit of 2000 blocks
-    const batchSize = 2000n;
+
+    // Celo Sepolia RPC (like Ankr) has a query range limit of 1000 blocks
+    const batchSize = 1000n;
     const promises = [];
-    
+
     for (let from = startBlock; from <= latest; from += batchSize) {
       const to = from + batchSize - 1n > latest ? latest : from + batchSize - 1n;
       promises.push(
