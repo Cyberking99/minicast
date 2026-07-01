@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAccount, useReadContract, useWriteContract, useChainId, useSwitchChain } from "wagmi";
-import { getPredictionPoolAddress, getUsdcAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI, USDC_ABI } from "@/shared/lib/contracts";
+import { getPredictionPoolAddress, getUsdcAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI, USDC_ABI, publicClient } from "@/shared/lib/contracts";
 import { AIAnalysisModal } from "@/features/analysis/components/AIAnalysisModal";
 
 interface Option {
@@ -122,15 +122,46 @@ export function StakePanel({
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const currentAllowance = (allowance as bigint) ?? BigInt(0);
       if (currentAllowance < amountBigInt) {
+        let approveGasEstimate;
+        try {
+          approveGasEstimate = await publicClient.estimateContractGas({
+            address: usdcAddress,
+            abi: USDC_ABI,
+            functionName: "approve",
+            args: [poolAddress, amountBigInt * BigInt(10)],
+            account: address,
+            feeCurrency: getFeeCurrencyAddress(),
+          } as any);
+        } catch (e) {
+          console.warn("Failed to estimate gas for approve, using fallback:", e);
+          approveGasEstimate = 80000n;
+        }
+
         await writeContractAsync({
           address: usdcAddress,
           abi: USDC_ABI,
           functionName: "approve",
           args: [poolAddress, amountBigInt * BigInt(10)],
           feeCurrency: getFeeCurrencyAddress(),
+          gas: approveGasEstimate + 50000n,
         } as any);
         await new Promise((resolve) => setTimeout(resolve, 2000));
         await refetchAllowance();
+      }
+
+      let stakeGasEstimate;
+      try {
+        stakeGasEstimate = await publicClient.estimateContractGas({
+          address: poolAddress,
+          abi: PREDICTION_POOL_ABI,
+          functionName: "stake",
+          args: [poolId as `0x${string}`, selectedOptionIdx, amountBigInt],
+          account: address,
+          feeCurrency: getFeeCurrencyAddress(),
+        } as any);
+      } catch (e) {
+        console.warn("Failed to estimate gas for stake, using fallback:", e);
+        stakeGasEstimate = 200000n;
       }
 
       const txHash = await writeContractAsync({
@@ -139,6 +170,7 @@ export function StakePanel({
         functionName: "stake",
         args: [poolId as `0x${string}`, selectedOptionIdx, amountBigInt],
         feeCurrency: getFeeCurrencyAddress(),
+        gas: stakeGasEstimate + 100000n,
       } as any);
       /* eslint-enable @typescript-eslint/no-explicit-any */
 

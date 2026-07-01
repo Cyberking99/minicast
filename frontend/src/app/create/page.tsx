@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { getPredictionPoolAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI } from "@/shared/lib/contracts";
+import { getPredictionPoolAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI, publicClient } from "@/shared/lib/contracts";
 
 export default function CreatePoolPage() {
   const router = useRouter();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
 
   const [question, setQuestion] = useState("");
@@ -77,6 +77,28 @@ export default function CreatePoolPage() {
       const predictionPoolAddress = getPredictionPoolAddress();
 
       /* eslint-disable @typescript-eslint/no-explicit-any */
+      let gasEstimate;
+      try {
+        gasEstimate = await publicClient.estimateContractGas({
+          address: predictionPoolAddress as `0x${string}`,
+          abi: PREDICTION_POOL_ABI,
+          functionName: "createPool",
+          args: [
+            question,
+            filteredOptions,
+            BigInt(stakeTs),
+            BigInt(resolveTs),
+            BigInt(86400), // disputeWindowSecs: 24 hours
+            BigInt(100),   // feeBps: 1.00%
+          ],
+          account: address,
+          feeCurrency: getFeeCurrencyAddress(),
+        } as any);
+      } catch (e) {
+        console.warn("Failed to estimate gas for createPool, using fallback:", e);
+        gasEstimate = 300000n;
+      }
+
       await writeContractAsync({
         address: predictionPoolAddress as `0x${string}`,
         abi: PREDICTION_POOL_ABI,
@@ -90,6 +112,7 @@ export default function CreatePoolPage() {
           BigInt(100),   // feeBps: 1.00%
         ],
         feeCurrency: getFeeCurrencyAddress(),
+        gas: gasEstimate + 100000n,
       } as any);
       /* eslint-enable @typescript-eslint/no-explicit-any */
     } catch (err: unknown) {

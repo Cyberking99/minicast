@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAccount, useWriteContract, useSendCalls } from "wagmi";
-import { USDC_ABI, getUsdcAddress, getFeeCurrencyAddress } from "@/shared/lib/contracts";
+import { USDC_ABI, getUsdcAddress, getFeeCurrencyAddress, publicClient } from "@/shared/lib/contracts";
 
 interface AIAnalysisModalProps {
   isOpen: boolean;
@@ -28,7 +28,7 @@ export function AIAnalysisModal({
     probabilities: number[];
   } | null>(null);
 
-  const { isConnected, connector } = useAccount();
+  const { address, isConnected, connector } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const { sendCallsAsync } = useSendCalls();
 
@@ -84,12 +84,28 @@ export function AIAnalysisModal({
         txHash = callsResult.id;
       } else {
         /* eslint-disable @typescript-eslint/no-explicit-any */
+        let gasEstimate;
+        try {
+          gasEstimate = await publicClient.estimateContractGas({
+            address: getUsdcAddress() as `0x${string}`,
+            abi: USDC_ABI,
+            functionName: "transfer",
+            args: ["0x47D190ed0bBcD757765a0A3862535D68BF000cF5", BigInt(500000)],
+            account: address,
+            feeCurrency: getFeeCurrencyAddress(),
+          } as any);
+        } catch (e) {
+          console.warn("Failed to estimate gas for USDC transfer, using fallback:", e);
+          gasEstimate = 80000n;
+        }
+
         txHash = await writeContractAsync({
           address: getUsdcAddress() as `0x${string}`,
           abi: USDC_ABI,
           functionName: "transfer",
           args: ["0x47D190ed0bBcD757765a0A3862535D68BF000cF5", BigInt(500000)],
           feeCurrency: getFeeCurrencyAddress(),
+          gas: gasEstimate + 50000n,
         } as any);
         /* eslint-enable @typescript-eslint/no-explicit-any */
       }

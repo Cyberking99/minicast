@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useReadContract, useReadContracts, useWriteContract } from "wagmi";
-import { getPredictionPoolAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI } from "@/shared/lib/contracts";
+import { useAccount, useReadContract, useReadContracts, useWriteContract } from "wagmi";
+import { getPredictionPoolAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI, publicClient } from "@/shared/lib/contracts";
 import { StatusBadge, PoolStatus } from "@/shared/ui/StatusBadge";
 import { LiveStakeBar } from "@/features/pools/components/LiveStakeBar";
 import { StakePanel } from "@/features/staking/components/StakePanel";
@@ -13,6 +13,7 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
   const poolId = params.id as `0x${string}`;
   const [selectedOptionIdx, setSelectedOptionIdx] = useState<number | null>(null);
   
+  const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const [isSettling, setIsSettling] = useState(false);
   const [settleError, setSettleError] = useState<string | null>(null);
@@ -22,12 +23,28 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
     setSettleError(null);
     try {
       /* eslint-disable @typescript-eslint/no-explicit-any */
+      let gasEstimate;
+      try {
+        gasEstimate = await publicClient.estimateContractGas({
+          address: getPredictionPoolAddress() as `0x${string}`,
+          abi: PREDICTION_POOL_ABI,
+          functionName: "settle",
+          args: [poolId],
+          account: address,
+          feeCurrency: getFeeCurrencyAddress(),
+        } as any);
+      } catch (e) {
+        console.warn("Failed to estimate gas for settle, using fallback:", e);
+        gasEstimate = 200000n;
+      }
+
       const txHash = await writeContractAsync({
         address: getPredictionPoolAddress() as `0x${string}`,
         abi: PREDICTION_POOL_ABI,
         functionName: "settle",
         args: [poolId],
         feeCurrency: getFeeCurrencyAddress(),
+        gas: gasEstimate + 100000n,
       } as any);
       /* eslint-enable @typescript-eslint/no-explicit-any */
       console.log("Settle transaction sent:", txHash);
