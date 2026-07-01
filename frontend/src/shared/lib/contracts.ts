@@ -1291,6 +1291,12 @@ export const publicClient = createPublicClient({
 
 export const getPredictionPoolAddress = () => CONTRACT_ADDRESSES[chainId].predictionPool;
 export const getUsdcAddress = () => CONTRACT_ADDRESSES[chainId].usdc;
+export const getFeeCurrencyAddress = () => {
+  if (chainId === 11142220) {
+    return "0xbf1441Ea57f43f35f713431001f35742c88071c7" as `0x${string}`;
+  }
+  return undefined;
+};
 
 export async function fetchOnChainPools() {
   const address = getPredictionPoolAddress();

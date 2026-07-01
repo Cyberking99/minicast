@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { getPredictionPoolAddress, PREDICTION_POOL_ABI } from "@/shared/lib/contracts";
+import { getPredictionPoolAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI } from "@/shared/lib/contracts";
 
 export default function CreatePoolPage() {
   const router = useRouter();
@@ -76,6 +76,7 @@ export default function CreatePoolPage() {
       console.log("Creating pool on-chain...");
       const predictionPoolAddress = getPredictionPoolAddress();
 
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       await writeContractAsync({
         address: predictionPoolAddress as `0x${string}`,
         abi: PREDICTION_POOL_ABI,
@@ -88,7 +89,9 @@ export default function CreatePoolPage() {
           BigInt(86400), // disputeWindowSecs: 24 hours
           BigInt(100),   // feeBps: 1.00%
         ],
-      });
+        feeCurrency: getFeeCurrencyAddress(),
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
     } catch (err: unknown) {
       console.error("Failed to deploy prediction pool:", err);
       const errMsg = err instanceof Error ? err.message : "Transaction rejected or execution failed.";

@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import { useReadContract, useReadContracts, useWriteContract } from "wagmi";
-import { getPredictionPoolAddress, PREDICTION_POOL_ABI } from "@/shared/lib/contracts";
+import { getPredictionPoolAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI } from "@/shared/lib/contracts";
 import { StatusBadge, PoolStatus } from "@/shared/ui/StatusBadge";
 import { LiveStakeBar } from "@/features/pools/components/LiveStakeBar";
 import { StakePanel } from "@/features/staking/components/StakePanel";
 import Link from "next/link";
+
 
 export default function PoolDetail({ params }: { params: { id: string } }) {
   const poolId = params.id as `0x${string}`;
@@ -20,12 +21,15 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
     setIsSettling(true);
     setSettleError(null);
     try {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       const txHash = await writeContractAsync({
         address: getPredictionPoolAddress() as `0x${string}`,
         abi: PREDICTION_POOL_ABI,
         functionName: "settle",
         args: [poolId],
-      });
+        feeCurrency: getFeeCurrencyAddress(),
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
       console.log("Settle transaction sent:", txHash);
       
       // Sync status to database

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAccount, useWriteContract, useSendCalls } from "wagmi";
-import { USDC_ABI, getUsdcAddress } from "@/shared/lib/contracts";
+import { USDC_ABI, getUsdcAddress, getFeeCurrencyAddress } from "@/shared/lib/contracts";
 
 interface AIAnalysisModalProps {
   isOpen: boolean;
@@ -83,12 +83,15 @@ export function AIAnalysisModal({
         });
         txHash = callsResult.id;
       } else {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         txHash = await writeContractAsync({
           address: getUsdcAddress() as `0x${string}`,
           abi: USDC_ABI,
           functionName: "transfer",
           args: ["0x47D190ed0bBcD757765a0A3862535D68BF000cF5", BigInt(500000)],
-        });
+          feeCurrency: getFeeCurrencyAddress(),
+        } as any);
+        /* eslint-enable @typescript-eslint/no-explicit-any */
       }
       
       console.log(`Payment transaction submitted: ${txHash}. Fetching AI report...`);

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAccount, useReadContract, useWriteContract, useChainId, useSwitchChain } from "wagmi";
-import { getPredictionPoolAddress, getUsdcAddress, PREDICTION_POOL_ABI, USDC_ABI } from "@/shared/lib/contracts";
+import { getPredictionPoolAddress, getUsdcAddress, getFeeCurrencyAddress, PREDICTION_POOL_ABI, USDC_ABI } from "@/shared/lib/contracts";
 import { AIAnalysisModal } from "@/features/analysis/components/AIAnalysisModal";
 
 interface Option {
@@ -127,7 +127,7 @@ export function StakePanel({
           abi: USDC_ABI,
           functionName: "approve",
           args: [poolAddress, amountBigInt * BigInt(10)],
-          feeCurrency: usdcAddress,
+          feeCurrency: getFeeCurrencyAddress(),
         } as any);
         await new Promise((resolve) => setTimeout(resolve, 2000));
         await refetchAllowance();
@@ -138,7 +138,7 @@ export function StakePanel({
         abi: PREDICTION_POOL_ABI,
         functionName: "stake",
         args: [poolId as `0x${string}`, selectedOptionIdx, amountBigInt],
-        feeCurrency: usdcAddress,
+        feeCurrency: getFeeCurrencyAddress(),
       } as any);
       /* eslint-enable @typescript-eslint/no-explicit-any */
 
