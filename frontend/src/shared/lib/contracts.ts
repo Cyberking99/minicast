@@ -8,9 +8,9 @@ export const CONTRACT_ADDRESSES = {
     deployedBlock: 0n,
   },
   11142220: {
-    predictionPool: "0x807203F9b5bab0cd65fB94Db89728075d9E5Fe84",
-    usdc: "0x01C5C0122039549AD1493B8220cABEdD739BC44E",
-    deployedBlock: 0n,
+    predictionPool: process.env.NEXT_PUBLIC_PREDICTION_POOL_ADDRESS as `0x${string}`,
+    usdc: process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`,
+    deployedBlock: 29607011n,
   },
 } as const;
 

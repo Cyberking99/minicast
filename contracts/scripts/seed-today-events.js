@@ -74,8 +74,8 @@ async function main() {
     {
       title: "Who will win the match between Ivory Coast and Ecuador in the 2026 world cup on 15/06/2026?",
       options: ["Ivory Coast wins", "Ecuador wins"],
-      stakeTime: "2026-07-01T00:00:00+01:00",
-      resolveTime: "2026-07-01T02:30:00+01:00"
+      stakeTime: "2026-07-01T09:00:00+01:00",
+      resolveTime: "2026-07-01T16:30:00+01:00"
     },
     {
       title: "Will Germany win Curacao in the 2026 world cup on 14/06/2026?",
