@@ -9,6 +9,9 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: "MiniCast — Prediction Pool",
   description: "Web3 prediction pool powered by Venice AI",
+  other: {
+    "talentapp:project_verification": "e465b8e822cb213b888d34fc22902a84b5bf65f841f7bf60d28c80080e770f0768ae0ba71ef7e752b4fd18d82713022a7bd7883368aad41c7da664c48542faaf",
+  },
 };
 
 export default function RootLayout({
