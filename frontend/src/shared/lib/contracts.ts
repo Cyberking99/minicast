@@ -31,11 +31,6 @@ export const PREDICTION_POOL_ABI = [
         "internalType": "address",
         "name": "feeCollector_",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "initialRelayer",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -209,25 +204,6 @@ export const PREDICTION_POOL_ABI = [
       }
     ],
     "name": "Refunded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousRelayer",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newRelayer",
-        "type": "address"
-      }
-    ],
-    "name": "RelayerUpdated",
     "type": "event"
   },
   {
@@ -426,29 +402,6 @@ export const PREDICTION_POOL_ABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "poolId",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address[]",
-        "name": "winners",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "batchPayout",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -786,19 +739,6 @@ export const PREDICTION_POOL_ABI = [
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "newRelayer",
-        "type": "address"
-      }
-    ],
-    "name": "setTrustedRelayer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes32",
         "name": "poolId",
         "type": "bytes32"
@@ -915,19 +855,6 @@ export const PREDICTION_POOL_ABI = [
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "trustedRelayer",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

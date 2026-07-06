@@ -17,7 +17,6 @@ async function main() {
   }
 
   const oracleAddress = process.env.ORACLE_ADDRESS ?? deployer.address;
-  const relayerAddress = process.env.ONESHOT_RELAYER_ADDRESS ?? deployer.address;
 
   const oracleVerifier = await ethers.deployContract("OracleVerifier", [oracleAddress]);
   await oracleVerifier.waitForDeployment();
@@ -31,7 +30,6 @@ async function main() {
     usdcAddress,
     await oracleVerifier.getAddress(),
     await feeCollector.getAddress(),
-    relayerAddress,
   ]);
   await predictionPool.waitForDeployment();
   console.log("PredictionPool:", await predictionPool.getAddress());

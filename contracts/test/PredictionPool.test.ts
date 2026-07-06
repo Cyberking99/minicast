@@ -8,7 +8,7 @@ describe("PredictionPool", function () {
   const STAKE_AMOUNT = 100n * 10n ** 6n;
 
   async function deployFixture() {
-    const [owner, oracle, relayer, alice, bob, carol] = await ethers.getSigners();
+    const [owner, oracle, alice, bob, carol] = await ethers.getSigners();
 
     const usdc = await ethers.deployContract("MockUSDC");
     const oracleVerifier = await ethers.deployContract("OracleVerifier", [oracle.address]);
@@ -17,7 +17,6 @@ describe("PredictionPool", function () {
       await usdc.getAddress(),
       await oracleVerifier.getAddress(),
       await feeCollector.getAddress(),
-      relayer.address,
     ]);
 
     for (const user of [alice, bob, carol]) {
@@ -50,7 +49,6 @@ describe("PredictionPool", function () {
       feeCollector,
       poolId,
       oracle,
-      relayer,
       alice,
       bob,
       carol,
@@ -117,28 +115,7 @@ describe("PredictionPool", function () {
     expect((await pool.pools(poolId)).status).to.equal(3);
   });
 
-  it("batchPayout matches computed amounts", async function () {
-    const { pool, usdc, poolId, oracle, relayer, alice, bob, stakeDeadline } = await deployFixture();
 
-    await pool.connect(alice).stake(poolId, 0, STAKE_AMOUNT);
-    await pool.connect(bob).stake(poolId, 1, STAKE_AMOUNT);
-
-    await time.increaseTo(stakeDeadline);
-    await pool.lockPool(poolId);
-
-    const verdictHash = ethers.id('{"winningOptionId":1}');
-    const sig = await signVerdict(oracle, verdictHash);
-    await pool.submitVerdict(poolId, 1, verdictHash, sig);
-    await time.increase(DISPUTE_WINDOW + 1n);
-
-    const [winnersResult, amountsResult] = await pool.computePayouts(poolId);
-    const winners = [...winnersResult];
-    const amounts = [...amountsResult];
-    await pool.connect(relayer).batchPayout(poolId, winners, amounts);
-
-    expect((await pool.pools(poolId)).status).to.equal(3);
-    expect(await usdc.balanceOf(bob.address)).to.be.gt(10_000n * 10n ** 6n - STAKE_AMOUNT);
-  });
 
   it("refunds when all stake is on one side", async function () {
     const { pool, usdc, poolId, oracle, alice, stakeDeadline } = await deployFixture();

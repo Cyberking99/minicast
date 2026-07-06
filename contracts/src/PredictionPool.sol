@@ -53,7 +53,6 @@ contract PredictionPool is ReentrancyGuard, Ownable {
     IERC20 public immutable usdc;
     OracleVerifier public immutable oracleVerifier;
     FeeCollector public immutable feeCollector;
-    address public trustedRelayer;
 
     mapping(bytes32 => Pool) public pools;
     mapping(bytes32 => Stake[]) internal poolStakes;
@@ -74,13 +73,11 @@ contract PredictionPool is ReentrancyGuard, Ownable {
     event Settled(bytes32 indexed poolId, uint8 winningOption, uint256 distributable);
     event PayoutSent(bytes32 indexed poolId, address indexed winner, uint256 amount);
     event Refunded(bytes32 indexed poolId, address indexed staker, uint256 amount);
-    event RelayerUpdated(address indexed previousRelayer, address indexed newRelayer);
 
     constructor(
         address usdcToken,
         address oracleVerifier_,
-        address feeCollector_,
-        address initialRelayer
+        address feeCollector_
     ) Ownable(msg.sender) {
         require(usdcToken != address(0), "PredictionPool: zero usdc");
         require(oracleVerifier_ != address(0), "PredictionPool: zero verifier");
@@ -89,13 +86,6 @@ contract PredictionPool is ReentrancyGuard, Ownable {
         usdc = IERC20(usdcToken);
         oracleVerifier = OracleVerifier(oracleVerifier_);
         feeCollector = FeeCollector(feeCollector_);
-        trustedRelayer = initialRelayer;
-    }
-
-    function setTrustedRelayer(address newRelayer) external onlyOwner {
-        address previous = trustedRelayer;
-        trustedRelayer = newRelayer;
-        emit RelayerUpdated(previous, newRelayer);
     }
 
     function createPool(
@@ -226,51 +216,7 @@ contract PredictionPool is ReentrancyGuard, Ownable {
         _executeSettlement(poolId, pool);
     }
 
-    /// @notice 1Shot relay entry — validates payouts then transfers USDC.
-    function batchPayout(bytes32 poolId, address[] calldata winners, uint256[] calldata amounts)
-        external
-        nonReentrant
-    {
-        require(msg.sender == trustedRelayer, "PredictionPool: not relayer");
-        Pool storage pool = pools[poolId];
-        require(pool.status == STATUS_RESOLVED, "PredictionPool: not resolved");
-        require(!disputeRaised[poolId], "PredictionPool: dispute open");
-        require(
-            block.timestamp >= pool.resolvedAt + pool.disputeWindow || pool.verdictCount >= 2,
-            "PredictionPool: dispute window"
-        );
-        require(winners.length == amounts.length, "PredictionPool: length mismatch");
 
-        (uint256 distributable, uint256 winningTotal, bool unresolvable) =
-            _settlementTotals(poolId, pool);
-
-        if (unresolvable) {
-            _refundAll(poolId, pool);
-            return;
-        }
-
-        uint256 computed;
-        for (uint256 i = 0; i < winners.length; i++) {
-            require(winners[i] != address(0), "PredictionPool: zero winner");
-            computed += amounts[i];
-            usdc.safeTransfer(winners[i], amounts[i]);
-            emit PayoutSent(poolId, winners[i], amounts[i]);
-        }
-
-        uint256 fee = (pool.totalPool * pool.protocolFeeBps) / 10_000;
-        require(computed <= distributable, "PredictionPool: overpay");
-
-        uint256 feeAmount = pool.totalPool - computed;
-        if (feeAmount > fee) {
-            feeAmount = fee;
-        }
-        if (feeAmount > 0) {
-            usdc.safeTransfer(address(feeCollector), feeAmount);
-        }
-
-        pool.status = STATUS_SETTLED;
-        emit Settled(poolId, pool.winningOption, distributable);
-    }
 
     function getPoolStakes(bytes32 poolId) external view returns (Stake[] memory) {
         return poolStakes[poolId];
