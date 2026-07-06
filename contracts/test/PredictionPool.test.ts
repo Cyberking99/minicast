@@ -79,7 +79,7 @@ describe("PredictionPool", function () {
     expect((await pool.pools(poolId)).status).to.equal(1);
   });
 
-  it("distributes parimutuel payouts to winners", async function () {
+  it("allows winners to claim parimutuel payouts", async function () {
     const {
       pool,
       usdc,
@@ -89,7 +89,6 @@ describe("PredictionPool", function () {
       alice,
       bob,
       stakeDeadline,
-      resolutionDeadline,
     } = await deployFixture();
 
     await pool.connect(alice).stake(poolId, 0, STAKE_AMOUNT);
@@ -110,14 +109,27 @@ describe("PredictionPool", function () {
     const distributable = total - fee;
     const expectedAlice = (STAKE_AMOUNT * distributable) / STAKE_AMOUNT;
 
-    expect(await usdc.balanceOf(alice.address)).to.equal(10_000n * 10n ** 6n - STAKE_AMOUNT + expectedAlice);
     expect(await usdc.balanceOf(await feeCollector.getAddress())).to.equal(fee);
+
+    const aliceBalanceBefore = await usdc.balanceOf(alice.address);
+    const [aliceClaimable, aliceIsRefund] = await pool.claimableWinnings(poolId, alice.address);
+    expect(aliceClaimable).to.equal(expectedAlice);
+    expect(aliceIsRefund).to.be.false;
+
+    const [bobClaimable, bobIsRefund] = await pool.claimableWinnings(poolId, bob.address);
+    expect(bobClaimable).to.equal(0n);
+    expect(bobIsRefund).to.be.false;
+
+    await expect(pool.connect(bob).claim(poolId)).to.be.revertedWith("PredictionPool: nothing to claim");
+
+    await pool.connect(alice).claim(poolId);
+    expect(await usdc.balanceOf(alice.address)).to.equal(aliceBalanceBefore + expectedAlice);
+
+    await expect(pool.connect(alice).claim(poolId)).to.be.revertedWith("PredictionPool: nothing to claim");
     expect((await pool.pools(poolId)).status).to.equal(3);
   });
 
-
-
-  it("refunds when all stake is on one side", async function () {
+  it("allows claiming refunds when pool is unresolvable", async function () {
     const { pool, usdc, poolId, oracle, alice, stakeDeadline } = await deployFixture();
 
     await pool.connect(alice).stake(poolId, 0, STAKE_AMOUNT);
@@ -129,8 +141,14 @@ describe("PredictionPool", function () {
     await pool.submitVerdict(poolId, 0, verdictHash, sig);
     await time.increase(DISPUTE_WINDOW + 1n);
 
-    const balanceBefore = await usdc.balanceOf(alice.address);
     await pool.settle(poolId);
+
+    const [aliceClaimable, aliceIsRefund] = await pool.claimableWinnings(poolId, alice.address);
+    expect(aliceClaimable).to.equal(STAKE_AMOUNT);
+    expect(aliceIsRefund).to.be.true;
+
+    const balanceBefore = await usdc.balanceOf(alice.address);
+    await pool.connect(alice).claim(poolId);
     const balanceAfter = await usdc.balanceOf(alice.address);
 
     expect(balanceAfter - balanceBefore).to.equal(STAKE_AMOUNT);

@@ -18,6 +18,9 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
   const [isSettling, setIsSettling] = useState(false);
   const [settleError, setSettleError] = useState<string | null>(null);
 
+  const [isClaiming, setIsClaiming] = useState(false);
+  const [claimError, setClaimError] = useState<string | null>(null);
+
   const handleSettle = async () => {
     setIsSettling(true);
     setSettleError(null);
@@ -77,6 +80,59 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
     }
   };
 
+  const handleClaim = async () => {
+    setIsClaiming(true);
+    setClaimError(null);
+    try {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      let gasEstimate;
+      try {
+        gasEstimate = await publicClient.estimateContractGas({
+          address: getPredictionPoolAddress() as `0x${string}`,
+          abi: PREDICTION_POOL_ABI,
+          functionName: "claim",
+          args: [poolId],
+          account: address,
+          feeCurrency: getFeeCurrencyAddress(),
+        } as any);
+      } catch (e) {
+        console.warn("Failed to estimate gas for claim, using fallback:", e);
+        gasEstimate = 150000n;
+      }
+
+      const txHash = await writeContractAsync({
+        address: getPredictionPoolAddress() as `0x${string}`,
+        abi: PREDICTION_POOL_ABI,
+        functionName: "claim",
+        args: [poolId],
+        feeCurrency: getFeeCurrencyAddress(),
+        gas: gasEstimate + 50000n,
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+      console.log("Claim transaction sent:", txHash);
+
+      // Sync claim status to database
+      const syncRes = await fetch("/api/stakes/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ poolId, staker: address, txHash }),
+      });
+
+      if (!syncRes.ok) {
+        console.error("Failed to sync claim state to database");
+      }
+
+      console.log("Claim successfully synchronized to database.");
+      refetchAll();
+    } catch (err: unknown) {
+      console.error("Failed to claim:", err);
+      const msg = err instanceof Error ? err.message : String(err);
+      setClaimError(msg);
+    } finally {
+      setIsClaiming(false);
+    }
+  };
+
   // 1. Fetch Pool Details
   const { data: poolData, isLoading: isPoolLoading, refetch: refetchPool } = useReadContract({
     address: getPredictionPoolAddress() as `0x${string}`,
@@ -106,11 +162,24 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
     query: { enabled: optionsArray.length > 0 },
   });
 
+  // 4. Fetch User's Claimable Winnings
+  const { data: claimableData, refetch: refetchClaimable } = useReadContract({
+    address: getPredictionPoolAddress() as `0x${string}`,
+    abi: PREDICTION_POOL_ABI,
+    functionName: "claimableWinnings",
+    args: address ? [poolId, address] : undefined,
+    query: { enabled: !!address },
+  });
+
   const refetchAll = () => {
     refetchPool();
     refetchOptions();
     refetchTotals();
+    refetchClaimable();
   };
+
+  const [claimableAmount, isRefundWinnings] = (claimableData || [0n, false]) as [bigint, boolean];
+  const claimableFormatted = Number(claimableAmount) / 1e6;
 
   if (isPoolLoading || isOptionsLoading) {
     return (
@@ -256,6 +325,48 @@ export default function PoolDetail({ params }: { params: { id: string } }) {
               style={{ padding: "12px 24px", minWidth: "150px" }}
             >
               {isSettling ? "Settling Pool..." : "Settle Pool"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Claim Winnings Banner */}
+      {status === "settled" && claimableAmount > 0n && (
+        <div style={{
+          background: "var(--surface)",
+          border: "2px solid var(--border)",
+          padding: "24px",
+          marginBottom: "40px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px"
+        }}>
+          <div style={{ flex: 1, minWidth: "280px" }}>
+            <h4 style={{ margin: 0, fontWeight: 700, fontSize: "14px", textTransform: "uppercase", fontFamily: "var(--font-mono)", color: "var(--accent)" }}>
+              ★ {isRefundWinnings ? "Refund Available" : "Winnings Available to Claim"}
+            </h4>
+            <p style={{ margin: "6px 0 0", fontSize: "12px", color: "var(--muted)", lineHeight: "1.5" }}>
+              {isRefundWinnings 
+                ? `This pool was resolved as unresolvable. You are eligible to claim a full refund of your staked amount: $${claimableFormatted.toFixed(2)} USDC.`
+                : `Congratulations! You won the prediction. You have $${claimableFormatted.toFixed(2)} USDC ready to claim.`
+              }
+            </p>
+            {claimError && (
+              <p style={{ margin: "8px 0 0", fontSize: "12px", color: "var(--red)", fontWeight: 600 }}>
+                ⚠️ Error: {claimError}
+              </p>
+            )}
+          </div>
+          <div>
+            <button
+              onClick={handleClaim}
+              disabled={isClaiming}
+              className="btn btn-primary btn-accent"
+              style={{ padding: "12px 24px", minWidth: "150px" }}
+            >
+              {isClaiming ? "Claiming..." : isRefundWinnings ? "Claim Refund" : "Claim Winnings"}
             </button>
           </div>
         </div>

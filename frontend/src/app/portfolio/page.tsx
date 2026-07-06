@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract, useChainId, useSwitchChain } from "wagmi";
 import Link from "next/link";
+import { getPredictionPoolAddress, PREDICTION_POOL_ABI, getFeeCurrencyAddress, publicClient } from "@/shared/lib/contracts";
 
 interface StakeItem {
   id: string;
@@ -28,9 +29,15 @@ interface StakeItem {
 
 export default function PortfolioPage() {
   const { address, isConnected } = useAccount();
+  const chainId = useChainId();
+  const { switchChain } = useSwitchChain();
+  const { writeContractAsync } = useWriteContract();
+
   const [activeTab, setActiveTab] = useState<"active" | "history">("active");
   const [stakes, setStakes] = useState<StakeItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [claimingPools, setClaimingPools] = useState<Record<string, boolean>>({});
+  const [claimError, setClaimError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isConnected || !address) {
@@ -100,6 +107,88 @@ export default function PortfolioPage() {
   const activeStakes = stakes.filter(s => s.pool.status !== "SETTLED" && s.pool.status !== "UNRESOLVABLE");
   const historyStakes = stakes.filter(s => s.pool.status === "SETTLED" || s.pool.status === "UNRESOLVABLE");
 
+  const handleClaim = async (poolId: string) => {
+    if (!isConnected || !address) return;
+
+    const targetChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID || 31337);
+    if (chainId !== targetChainId) {
+      if (switchChain) {
+        switchChain({ chainId: targetChainId });
+      } else {
+        alert(`Please switch to Celo Sepolia network`);
+      }
+      return;
+    }
+
+    setClaimingPools(prev => ({ ...prev, [poolId]: true }));
+    setClaimError(null);
+
+    const poolAddress = getPredictionPoolAddress() as `0x${string}`;
+
+    try {
+      let claimGasEstimate;
+      try {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        claimGasEstimate = await publicClient.estimateContractGas({
+          address: poolAddress,
+          abi: PREDICTION_POOL_ABI,
+          functionName: "claim",
+          args: [poolId as `0x${string}`],
+          account: address,
+          feeCurrency: getFeeCurrencyAddress(),
+        } as any);
+      } catch (e) {
+        console.warn("Failed to estimate gas for claim, using fallback:", e);
+        claimGasEstimate = 150000n;
+      }
+
+      const txHash = await writeContractAsync({
+        address: poolAddress,
+        abi: PREDICTION_POOL_ABI,
+        functionName: "claim",
+        args: [poolId as `0x${string}`],
+        feeCurrency: getFeeCurrencyAddress(),
+        gas: claimGasEstimate + 50000n,
+      } as any);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      if (txHash) {
+        console.log(`Claim transaction sent: ${txHash}. Syncing with DB...`);
+        
+        const syncRes = await fetch('/api/stakes/claim', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            poolId,
+            staker: address,
+            txHash
+          })
+        });
+
+        if (!syncRes.ok) {
+          console.error("Failed to sync claim to DB:", await syncRes.text());
+        } else {
+          console.log("Successfully synced claim to DB");
+        }
+
+        const res = await fetch(`/api/portfolio?address=${address}`);
+        if (res.ok) {
+          const json = await res.json();
+          setStakes(json.stakes || []);
+        }
+      }
+    } catch (err: unknown) {
+      console.error("Claiming failed:", err);
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      const shortMessage = err && typeof err === "object" && err !== null && "shortMessage" in err 
+        ? String((err as { shortMessage?: unknown }).shortMessage) 
+        : undefined;
+      setClaimError(shortMessage || errorMessage || "Claim transaction failed");
+    } finally {
+      setClaimingPools(prev => ({ ...prev, [poolId]: false }));
+    }
+  };
+
   return (
     <main className="app-main">
       <h1 style={{ fontSize: "32px", marginBottom: "32px" }}>MY PORTFOLIO</h1>
@@ -146,6 +235,12 @@ export default function PortfolioPage() {
 
         {/* Right Content */}
         <section style={{ flex: 1 }}>
+          {claimError && (
+            <div style={{ color: "var(--red)", fontSize: "12px", marginBottom: "16px", border: "1.5px solid var(--red)", padding: "10px", background: "var(--surface)" }}>
+              ⚠️ {claimError}
+            </div>
+          )}
+
           {isLoading ? (
             <div style={{ textAlign: "center", padding: "48px 0", color: "var(--muted)", fontFamily: "var(--font-mono)" }}>
               LOADING PORTFOLIO DATA...
@@ -200,9 +295,12 @@ export default function PortfolioPage() {
                 const amountUSDC = parseFloat(stake.amount) / 1e6;
                 const payoutVal = stake.payout ? parseFloat(stake.payout) / 1e6 : 0;
                 const isWinner = payoutVal > amountUSDC;
-                const isRefund = stake.pool.status === "UNRESOLVABLE";
+                const isRefund = stake.pool.status === "UNRESOLVABLE" || stake.pool.winningOptionId === 255;
                 const selectedOptionName = stake.pool.options[stake.optionId] || `Option ${stake.optionId}`;
-                const winningOptionName = stake.pool.winningOptionId !== null ? (stake.pool.options[stake.pool.winningOptionId] || `Option ${stake.pool.winningOptionId}`) : "N/A";
+                const winningOptionName = stake.pool.winningOptionId !== null && stake.pool.winningOptionId !== 255 ? (stake.pool.options[stake.pool.winningOptionId] || `Option ${stake.pool.winningOptionId}`) : "N/A";
+                const hasClaimed = stake.payoutTxHash !== null;
+                const canClaim = !hasClaimed && payoutVal > 0;
+                const isClaiming = claimingPools[stake.poolId] || false;
 
                 return (
                   <Link key={stake.id} href={`/pool/${stake.poolId}`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -222,21 +320,38 @@ export default function PortfolioPage() {
                           )}
                         </div>
                       </div>
-                      <div style={{ textAlign: "right", paddingLeft: "24px", fontFamily: "var(--font-mono)" }}>
-                        {isRefund ? (
-                          <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--muted)" }}>REFUND</div>
-                        ) : isWinner ? (
-                          <div className="amount-won" style={{ fontSize: "16px" }}>
-                            +${(payoutVal - amountUSDC).toFixed(2)}
-                          </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                        {canClaim ? (
+                          <button
+                            className="btn btn-primary btn-accent"
+                            style={{ fontSize: "11px", padding: "8px 12px", border: "2px solid var(--fg)", borderRadius: 0, fontWeight: 800, textTransform: "uppercase" }}
+                            disabled={isClaiming}
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              await handleClaim(stake.poolId);
+                            }}
+                          >
+                            {isClaiming ? "CLAIMING..." : isRefund ? `CLAIM REFUND $${payoutVal.toFixed(2)}` : `CLAIM WINNINGS $${payoutVal.toFixed(2)}`}
+                          </button>
                         ) : (
-                          <div className="amount-lost" style={{ fontSize: "16px" }}>
-                            -${amountUSDC.toFixed(2)}
+                          <div style={{ textAlign: "right", fontFamily: "var(--font-mono)" }}>
+                            {isRefund ? (
+                              <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--muted)" }}>REFUNDED</div>
+                            ) : isWinner ? (
+                              <div className="amount-won" style={{ fontSize: "16px" }}>
+                                +${(payoutVal - amountUSDC).toFixed(2)}
+                              </div>
+                            ) : (
+                              <div className="amount-lost" style={{ fontSize: "16px" }}>
+                                -${amountUSDC.toFixed(2)}
+                              </div>
+                            )}
+                            <div style={{ fontSize: "10px", color: "var(--muted)", marginTop: "4px" }}>
+                              {hasClaimed ? `CLAIMED Payout: $${payoutVal.toFixed(2)}` : `PAYOUT: $${payoutVal.toFixed(2)}`}
+                            </div>
                           </div>
                         )}
-                        <div style={{ fontSize: "10px", color: "var(--muted)", marginTop: "4px" }}>
-                          PAYOUT: ${payoutVal.toFixed(2)}
-                        </div>
                       </div>
                     </div>
                   </Link>

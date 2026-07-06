@@ -91,7 +91,6 @@ export async function POST(req: NextRequest) {
         where: { id: dbStake.id },
         data: {
           payout,
-          payoutTxHash: txHash
         }
       });
     }

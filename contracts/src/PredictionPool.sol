@@ -59,6 +59,7 @@ contract PredictionPool is ReentrancyGuard, Ownable {
     mapping(bytes32 => mapping(uint8 => uint256)) public optionTotals;
     mapping(bytes32 => mapping(address => Stake[])) public stakerPositions;
     mapping(bytes32 => bool) public disputeRaised;
+    mapping(bytes32 => mapping(address => bool)) public hasClaimed;
 
     event PoolCreated(
         bytes32 indexed poolId,
@@ -261,33 +262,18 @@ contract PredictionPool is ReentrancyGuard, Ownable {
     }
 
     function _executeSettlement(bytes32 poolId, Pool storage pool) internal {
-        (uint256 distributable, uint256 winningTotal, bool unresolvable) = _settlementTotals(poolId, pool);
+        (uint256 distributable, , bool unresolvable) = _settlementTotals(poolId, pool);
 
         if (unresolvable) {
-            _refundAll(poolId, pool);
+            pool.winningOption = type(uint8).max;
+            pool.status = STATUS_SETTLED;
+            emit Settled(poolId, type(uint8).max, pool.totalPool);
             return;
         }
 
         uint256 fee = (pool.totalPool * pool.protocolFeeBps) / 10_000;
-        uint256 paid;
-        Stake[] storage stakes = poolStakes[poolId];
-
-        for (uint256 i = 0; i < stakes.length; i++) {
-            Stake storage s = stakes[i];
-            if (s.optionId != pool.winningOption) continue;
-
-            uint256 payout = (s.amount * distributable) / winningTotal;
-            paid += payout;
-            usdc.safeTransfer(s.staker, payout);
-            emit PayoutSent(poolId, s.staker, payout);
-        }
-
-        uint256 remainder = pool.totalPool - paid;
-        if (remainder > fee) {
-            remainder = fee;
-        }
-        if (remainder > 0) {
-            usdc.safeTransfer(address(feeCollector), remainder);
+        if (fee > 0) {
+            usdc.safeTransfer(address(feeCollector), fee);
         }
 
         pool.status = STATUS_SETTLED;
@@ -313,14 +299,57 @@ contract PredictionPool is ReentrancyGuard, Ownable {
         unresolvable = winningTotal == 0 || losingPool == 0;
     }
 
-    function _refundAll(bytes32 poolId, Pool storage pool) internal {
-        Stake[] storage stakes = poolStakes[poolId];
-        for (uint256 i = 0; i < stakes.length; i++) {
-            uint256 amount = stakes[i].amount;
-            usdc.safeTransfer(stakes[i].staker, amount);
-            emit Refunded(poolId, stakes[i].staker, amount);
+    function claimableWinnings(bytes32 poolId, address staker) public view returns (uint256 amount, bool isRefund) {
+        Pool storage pool = pools[poolId];
+        if (pool.status != STATUS_SETTLED) {
+            return (0, false);
         }
-        pool.status = STATUS_SETTLED;
-        emit Settled(poolId, type(uint8).max, pool.totalPool);
+        if (hasClaimed[poolId][staker]) {
+            return (0, false);
+        }
+
+        if (pool.winningOption == type(uint8).max) {
+            // Refund
+            uint256 totalStaked;
+            Stake[] storage positions = stakerPositions[poolId][staker];
+            for (uint256 i = 0; i < positions.length; i++) {
+                totalStaked += positions[i].amount;
+            }
+            return (totalStaked, true);
+        } else {
+            // Winning payout
+            (uint256 distributable, uint256 winningTotal, bool unresolvable) = _settlementTotals(poolId, pool);
+            if (unresolvable || winningTotal == 0) {
+                return (0, false);
+            }
+
+            uint256 totalWinningAmount;
+            Stake[] storage positions = stakerPositions[poolId][staker];
+            for (uint256 i = 0; i < positions.length; i++) {
+                if (positions[i].optionId == pool.winningOption) {
+                    totalWinningAmount += positions[i].amount;
+                }
+            }
+
+            if (totalWinningAmount > 0) {
+                uint256 payout = (totalWinningAmount * distributable) / winningTotal;
+                return (payout, false);
+            }
+            return (0, false);
+        }
+    }
+
+    function claim(bytes32 poolId) external nonReentrant {
+        (uint256 amount, bool isRefund) = claimableWinnings(poolId, msg.sender);
+        require(amount > 0, "PredictionPool: nothing to claim");
+
+        hasClaimed[poolId][msg.sender] = true;
+        usdc.safeTransfer(msg.sender, amount);
+
+        if (isRefund) {
+            emit Refunded(poolId, msg.sender, amount);
+        } else {
+            emit PayoutSent(poolId, msg.sender, amount);
+        }
     }
 }
